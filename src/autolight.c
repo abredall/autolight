@@ -1,6 +1,7 @@
 #include <stdio.h>  // printf(), fopen(), fprintf(), etc.
 #include <stdlib.h> // atoi(), atof()
 #include <string.h>
+#define _BSD_SOURCE
 #include <unistd.h> // sleep()
 #include <math.h>   // log(), exp(), and fabs()
 #include "io.h"
@@ -66,11 +67,12 @@ int main() {
 		fclose(fp_sens);
 		POLLING_PER=1/sensor_freq;
 	}
+	long int pol_per_usec=1000000*POLLING_PER;
 
 	char lid_state[7];
 	long lux;
 	while(1) {
-		sleep(POLLING_PER);
+		usleep(pol_per_usec);
 		FILE * fp_lid = fopen(LID_STATE_FILE, "r");
 		if (fp_lid == NULL) return 1;
 		fgets(lid_state, 19, fp_lid);
@@ -81,7 +83,6 @@ int main() {
 			if (fscanf(fp_lux, "%li", &lux) != 1) return 1;
 			fclose(fp_lux);
 			change_brightness(lux);
-			fflush(stdout);
 		}
 	}
 	

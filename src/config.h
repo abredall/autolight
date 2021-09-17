@@ -1,9 +1,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-extern char SENSOR[];
-extern char ADAPTER[];
-
 extern float POLLING_PER;
 
 extern const unsigned int MIN_LUX;

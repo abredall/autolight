@@ -1,11 +1,8 @@
 // TODO: Make all of these read from a config
 // TODO: Add multi-monitor support
-char SENSOR[]="iio:device0";
-char ADAPTER[]="ADP1";
 
 // How often to check the ALS in seconds.
 // Default: 0 (match ALS's frequency, i.e. as fast as the device allows)
-// TODO: Read sensor frequency if 0
 float POLLING_PER=0;
 
 // Values read by the ALS for which the screen should be dimmest or brightest

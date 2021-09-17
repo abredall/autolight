@@ -1,7 +1,6 @@
 #include <stdio.h>  // printf(), fopen(), fprintf(), etc.
-#include <stdlib.h> // atoi(), atof()
-#include <string.h>
-#define _BSD_SOURCE
+#include <string.h> // strstr()
+#define _BSD_SOURCE // fixed usleep import
 #include <unistd.h> // sleep()
 #include <math.h>   // log(), exp(), and fabs()
 #include "io.h"

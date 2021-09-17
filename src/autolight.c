@@ -26,7 +26,7 @@ int change_brightness(long int lux) {
 		ambi_bri_frac *= BRI_UNPLUGGED_MODIFIER;
 	}
 
-	float ambi_bri_frac_old = (log(AMBI_BRI_OLD)-log(MIN_LUX))/(log(MAX_LUX)-log(MIN_LUX));
+	float ambi_bri_frac_old = (log(AMBI_BRI_OLD)-log(MIN_BRI))/(log(MAX_BRI)-log(MIN_BRI));
 	float frac_diff=fabs(ambi_bri_frac-ambi_bri_frac_old);
 
 	char change_bri;
@@ -44,8 +44,6 @@ int change_brightness(long int lux) {
 	if (ambi_bri < 0) ambi_bri=0;
 	if (ambi_bri > MAX_BRI) ambi_bri=MAX_BRI;
 
-	/* printf("%i\n", ambi_bri); */
-	/* fflush(stdout); */
 	if (change_bri) write_to(BRI_FILE, ambi_bri);
 
 	AMBI_BRI_OLD=ambi_bri;

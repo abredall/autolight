@@ -65,7 +65,6 @@ int main() {
 		if (fscanf(fp_sens, "%f", &sensor_freq) != 1) return 1;
 		fclose(fp_sens);
 		POLLING_PER=1/sensor_freq;
-		printf("Using Sensor Period: %f", POLLING_PER);
 	}
 
 	char lid_state[7];

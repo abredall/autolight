@@ -6,7 +6,7 @@
 float POLLING_PER=0;
 
 // Values read by the ALS for which the screen should be dimmest or brightest
-// Default: 10 and 9000000
+// Default: 50 and 9000000
 const unsigned int MIN_LUX=50;
 const unsigned long int MAX_LUX=9000000;
 

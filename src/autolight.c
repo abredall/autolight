@@ -29,7 +29,7 @@ int change_brightness(long int lux) {
 	float frac_diff=fabs(ambi_bri_frac-ambi_bri_frac_old);
 
 	char change_bri;
-	if (frac_diff < BRI_THRESHOLD_FRAC) {
+	if (frac_diff < BRI_THRESHOLD_FRAC && read_from(BRI_FILE) != AMBI_BRI_OLD) {
 		change_bri=0;
 	} else {
 		change_bri=1;
@@ -43,9 +43,16 @@ int change_brightness(long int lux) {
 	if (ambi_bri < 0) ambi_bri=0;
 	if (ambi_bri > MAX_BRI) ambi_bri=MAX_BRI;
 
-	if (change_bri) write_to(BRI_FILE, ambi_bri);
-
-	AMBI_BRI_OLD=ambi_bri;
+	if (change_bri) {
+		if (AMBI_BRI_OLD < ambi_bri) {
+			AMBI_BRI_OLD += 1;
+		} else if (AMBI_BRI_OLD > ambi_bri) {
+			AMBI_BRI_OLD -= 1;
+		} else {
+			AMBI_BRI_OLD = ambi_bri;
+		}
+		write_to(BRI_FILE, AMBI_BRI_OLD);
+	}
 	PLUG_STATE_OLD=plug_state;
 
 	return 0;

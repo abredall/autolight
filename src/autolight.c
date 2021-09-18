@@ -39,7 +39,7 @@ int change_brightness(long int lux) {
 		change_bri=1;
 	}
 
-	int ambi_bri=(int)exp(log(MAX_BRI)*ambi_bri_frac);
+	int ambi_bri=(int)round(exp(log(MAX_BRI)*ambi_bri_frac));
 	if (ambi_bri < 0) ambi_bri=0;
 	if (ambi_bri > MAX_BRI) ambi_bri=MAX_BRI;
 

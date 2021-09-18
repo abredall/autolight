@@ -4,10 +4,10 @@ PROJECT = autolight
 SOURCES = $(wildcard src/*.c)
 OBJECTS = $(SOURCES:.c=.o)
 
-all: $(PROJECT)
+all: bin/$(PROJECT)
 .PHONY: clean run
 
-$(PROJECT): $(OBJECTS)
+bin/$(PROJECT): $(OBJECTS)
 	$(CC) $^ -o $@ -l m
 
 src/%.o: src/%.c src/*.h

@@ -2,7 +2,7 @@
 CC = gcc
 PROJECT = autolight
 SOURCES = $(wildcard src/*.c)
-OBJECTS = $(SOURCES:.c=.o)
+OBJECTS = $(SOURCES:src/%.c=obj/%.o)
 
 all: bin/$(PROJECT)
 .PHONY: clean run
@@ -10,7 +10,7 @@ all: bin/$(PROJECT)
 bin/$(PROJECT): $(OBJECTS)
 	$(CC) $^ -o $@ -l m
 
-src/%.o: src/%.c src/*.h
+obj/%.o: src/%.c src/*.h
 	$(CC) -c $< -o $@
 
 clean:
@@ -18,4 +18,4 @@ clean:
 	@ rm -f src/*.o
 
 run:
-	./$(PROJECT)
+	bin/$(PROJECT)

@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "config.h"
 
 int write_to(char * file_name, int input) {
 	FILE * fp_out = fopen(file_name, "w");

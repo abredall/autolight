@@ -3,6 +3,9 @@ CC = gcc
 PROJECT = autolight
 SOURCES = $(wildcard src/*.c)
 OBJECTS = $(SOURCES:src/%.c=obj/%.o)
+ifeq ($(PREFIX),)
+	PREFIX := /usr/local
+endif
 
 all: bin/$(PROJECT)
 .PHONY: clean run
@@ -19,3 +22,14 @@ clean:
 
 run:
 	bin/$(PROJECT)
+
+install: bin/$(PROJECT)
+	@ echo Installing to $(DESTDIR)$(PREFIX)/bin...
+	@ install -d $(DESTDIR)$(PREFIX)/bin/
+	@ install -m 755 bin/$(PROJECT) $(DESTDIR)$(PREFIX)/bin/
+	@ echo Done!
+
+uninstall:
+	@ echo Uninstalling from $(DESTDIR)$(PREFIX)/bin...
+	@ rm -f $(DESTDIR)$(PREFIX)/bin/$(PROJECT)
+	@ echo Done!

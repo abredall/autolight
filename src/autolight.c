@@ -12,6 +12,7 @@ int MAX_BRI;
 
 int AMBI_BRI_OLD;
 int PLUG_STATE_OLD;
+char LID_STATE_OLD[20];
 int CHANGING_BRI=0;
 
 /* 
@@ -84,6 +85,12 @@ int main() {
 	AMBI_BRI_OLD=read_from(BRI_FILE);
 	PLUG_STATE_OLD=read_from(PLUG_STATE_FILE);
 
+
+	FILE * fp_lid = fopen(LID_STATE_FILE, "r");
+	if (fp_lid == NULL) return 1;
+	fgets(LID_STATE_OLD, 19, fp_lid);
+	fclose(fp_lid);
+
 	if (POLLING_PER == 0) {
 		float sensor_freq;
 
@@ -97,7 +104,7 @@ int main() {
 
 	long int pol_per_usec=1000000*POLLING_PER;
 
-	char lid_state[7];
+	char lid_state[20];
 	long lux;
 
 	while(1) {
@@ -106,10 +113,17 @@ int main() {
 		/* make sure laptop lid is open */
 		FILE * fp_lid = fopen(LID_STATE_FILE, "r");
 		if (fp_lid == NULL) return 1;
-		fgets(lid_state, 19, fp_lid);
+		fgets(lid_state, 20, fp_lid);
 		fclose(fp_lid);
 
+		printf("%s", lid_state);
+		fflush(stdout);
+
 		if (strstr(lid_state, "open") != NULL) {
+			if (strstr(LID_STATE_OLD, "closed") != NULL) {
+				memcpy(LID_STATE_OLD, lid_state, sizeof LID_STATE_OLD);
+			}
+
 			/* read in lux value */
 			FILE * fp_lux = fopen("/sys/bus/iio/devices/iio:device0/in_illuminance_input", "r");
 			if (fp_lux == NULL) return 1;
@@ -130,6 +144,10 @@ int main() {
 
 		} else {
 			/* if laptop lid is closed, only check once per second to save battery */
+			if (strstr(LID_STATE_OLD, "open") != NULL) {
+				write_to(BRI_FILE, 0);
+				memcpy(LID_STATE_OLD, lid_state, sizeof LID_STATE_OLD);
+			}
 			usleep(1000000);
 		}
 	}

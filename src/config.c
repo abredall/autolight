@@ -1,24 +1,18 @@
+#include "config.h"
 // TODO: Make all of these read from a config
 // TODO: Add multi-monitor support
+void config_initialize() {
+	cfg.files.bri = "/sys/class/backlight/acpi_video0/brightness";
+	cfg.files.max_bri = "/sys/class/backlight/acpi_video0/max_brightness";
+	cfg.files.plug_state = "/sys/class/power_supply/ADP1/online";
+	cfg.files.lid_state = "/proc/acpi/button/lid/LID0/state";
+	cfg.files.als_lux = "/sys/bus/iio/devices/iio:device0/in_illuminance_input"; 
+	cfg.files.als_freq = "/sys/bus/iio/devices/iio:device0/in_illuminance_sampling_frequency"; 
 
-// How often to check the ALS in seconds.
-// Default: 0 (match ALS's frequency, i.e. as fast as the device allows)
-float POLLING_PER=0;
+	cfg.scales.min_lux = 50;
+	cfg.scales.max_lux = 1000000;
+	cfg.scales.bri_threshhold_frac = 0.1;
+	cfg.scales.bri_unplugged_modifier = 0.9;
 
-// Values read by the ALS for which the screen should be dimmest or brightest
-// Default: 50 and 9000000
-const unsigned int MIN_LUX=50;
-const unsigned long int MAX_LUX=9000000;
-
-// Amount that ambient brightness must change before we change the screen brightness
-// Default: 0.1
-const float BRI_THRESHOLD_FRAC=0.1;
-
-// What to modify the brightness by when the laptop is unplugged
-// Default: 0.9
-const float BRI_UNPLUGGED_MODIFIER=0.9;
-
-char BRI_FILE[]="/sys/class/backlight/acpi_video0/brightness";
-char MAX_BRI_FILE[]="/sys/class/backlight/acpi_video0/max_brightness";
-char PLUG_STATE_FILE[]="/sys/class/power_supply/ADP1/online";
-char LID_STATE_FILE[]="/proc/acpi/button/lid/LID0/state";
+	cfg.als.pol_per = 0;
+}

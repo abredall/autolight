@@ -1,27 +1,27 @@
 # -*- MakeFile -*-
-CC = gcc
-PROJECT = autolight
-SOURCES = $(wildcard src/*.c)
-OBJECTS = $(SOURCES:src/%.c=obj/%.o)
 ifeq ($(PREFIX),)
 	PREFIX := /usr/local
 endif
+PROJECT=autolight
 
-all: bin/$(PROJECT)
-.PHONY: clean run
+all: src
 
-bin/$(PROJECT): $(OBJECTS)
-	$(CC) $^ -o $@ -l m
+.PHONY: src
+src:
+	@ $(MAKE) -C src/
 
-obj/%.o: src/%.c src/*.h
-	$(CC) -c $< -o $@
+# bin/$(PROJECT): $(OBJECTS)
+# 	$(CC) $^ -o $@ -l m
+
+# obj/%.o: src/%.c src/*.h
+# 	$(CC) -c $< -o $@
 
 clean:
-	@ echo Cleaning src/
-	@ rm -f src/*.o
+	@ echo Cleaning autolight source tree
+	@ $(MAKE) -C src/ clean
 
-run:
-	bin/$(PROJECT)
+# run:
+# 	bin/$(PROJECT)
 
 install: bin/$(PROJECT)
 	@ echo Installing to $(DESTDIR)$(PREFIX)/bin...

@@ -1,17 +1,28 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-extern float POLLING_PER;
+struct Config {
+	struct Files {
+		char * bri;
+		char * max_bri;
+		char * plug_state;
+		char * lid_state;
+		char * als_lux;
+		char * als_freq;
+	} files;
 
-extern const unsigned int MIN_LUX;
-extern const unsigned long int MAX_LUX;
+	struct Scaling {
+		unsigned int min_lux;
+		unsigned long int max_lux;
+		float bri_threshhold_frac;
+		float bri_unplugged_modifier;
+	} scales;
 
-extern const float BRI_THRESHOLD_FRAC;
-extern const float BRI_UNPLUGGED_MODIFIER;
+	struct ALS {
+		float pol_per;
+	} als;
+} cfg;
 
-extern char BRI_FILE[];
-extern char MAX_BRI_FILE[];
-extern char PLUG_STATE_FILE[];
-extern char LID_STATE_FILE[];
+extern void config_initialize();
 
 #endif

@@ -2,7 +2,6 @@
 #include <stdbool.h> // bool
 #include <stdio.h>
 #include "objects.h"
-#include "io.h"
 #include "config.h"
 #include "misc.h"
 

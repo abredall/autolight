@@ -41,14 +41,6 @@ For best results, configure your system to run the above command at startup.
 ## TODO
 - [] feat: allow configuration at runtime
 
-## Version History
-
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
-    * Initial Release
-
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details

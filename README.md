@@ -21,7 +21,7 @@ $ cd autolight
 ```
 2. To build autolight and run tests, run:
 ```
-make
+$ make
 ```
 Make sure all the tests pass before installing, or else autolight won't run properly.
 

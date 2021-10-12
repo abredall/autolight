@@ -3,41 +3,40 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include "../../config.h"
+#include "../../src/config.h"
 
 extern int test_read_screen_bri();
 extern int test_write_screen_bri();
 extern int test_read_screen_max_bri();
 
-int test_screen() {
+int test_screen(int * n_pass, int * n_fail) {
 	printf("Testing connection to screen...\n");
 
 	int result;
-	int n_passed = 0;
-	int n_failed = 0;
+	*n_pass = 0;
+	*n_fail = 0;
 
 	result = test_read_screen_bri();
 	if (result == EXIT_SUCCESS) {
-		n_passed += 1;
+		*n_pass += 1;
 	} else if (result == EXIT_FAILURE) {
-		n_failed += 1;
+		*n_fail += 1;
 	}
 
 	result = test_write_screen_bri();
 	if (result == EXIT_SUCCESS) {
-		n_passed += 1;
+		*n_pass += 1;
 	} else if (result == EXIT_FAILURE) {
-		n_failed += 1;
+		*n_fail += 1;
 	}
 
 	result = test_read_screen_max_bri();
 	if (result == EXIT_SUCCESS) {
-		n_passed += 1;
+		*n_pass += 1;
 	} else if (result == EXIT_FAILURE) {
-		n_failed += 1;
+		*n_fail += 1;
 	}
 
-	printf("Passed: %d\t Failed: %d\n", n_passed, n_failed);
 	return 0;
 }
 

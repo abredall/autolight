@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include "../../config.h"
+#include "../../src/config.h"
 
 int test_read_lid_state() {
 	printf("Test: Read lid state... ");
@@ -33,29 +33,25 @@ int test_read_plug_state() {
 	return EXIT_SUCCESS;
 }
 
-int test_laptop() {
+int test_laptop(int * n_pass, int * n_fail) {
 	printf("Testing knowledge of laptop state...\n");
 
 	int result;
-	int n_passed = 0;
-	int n_failed = 0;
-
 
 	result = test_read_lid_state();
 	if (result == EXIT_SUCCESS) {
-		n_passed += 1;
+		*n_pass += 1;
 	} else if (result == EXIT_FAILURE) {
-		n_failed += 1;
+		*n_fail += 1;
 	}
 
 	result = test_read_plug_state();
 	if (result == EXIT_SUCCESS) {
-		n_passed += 1;
+		*n_pass += 1;
 	} else if (result == EXIT_FAILURE) {
-		n_failed += 1;
+		*n_fail += 1;
 	}
 
-	printf("Passed: %d\t Failed: %d\n", n_passed, n_failed);
 	return 0;
 }
 

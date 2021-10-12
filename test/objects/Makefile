@@ -8,7 +8,7 @@ all: print_message $(OBJECTS)
 .PHONY: print_message clean
 
 print_message:
-	@ echo Compiling autolight/src/objects/test
+	@ echo Compiling autolight/test/objects/test
 
 %.o: %.c *.h
 	@ $(CC) $(CFLAGS) -c $< -o $@

@@ -16,4 +16,3 @@ print_message:
 clean:
 	@ echo Cleaning autolight/src/objects/
 	@ rm -f *.o
-	@ $(MAKE) -C test/ clean

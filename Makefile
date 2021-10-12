@@ -4,7 +4,7 @@ ifeq ($(PREFIX),)
 endif
 PROJECT=autolight
 
-all: src
+all: src test
 .PHONY: src clean install uninstall test
 
 src:
@@ -13,9 +13,11 @@ src:
 clean:
 	@ echo Cleaning autolight source tree
 	@ $(MAKE) -C src/ clean
+	@ echo Cleaning autolight test tree
+	@ $(MAKE) -C test/ clean
 
 test:
-	@ $(MAKE) -C src/ test
+	@ $(MAKE) -C test/ test
 
 install: bin/$(PROJECT)
 	@ echo Installing to $(DESTDIR)$(PREFIX)/bin...

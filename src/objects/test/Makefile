@@ -5,15 +5,14 @@ SOURCES = $(wildcard *.c)
 OBJECTS = $(SOURCES:.c=.o)
 
 all: print_message $(OBJECTS)
-.PHONY: print_message tests clean
+.PHONY: print_message clean
 
 print_message:
-	@ echo Compiling autolight/src/objects/
+	@ echo Compiling autolight/src/objects/test
 
 %.o: %.c *.h
 	@ $(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	@ echo Cleaning autolight/src/objects/
+	@ echo Cleaning autolight/src/objects/test
 	@ rm -f *.o
-	@ $(MAKE) -C test/ clean

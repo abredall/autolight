@@ -5,14 +5,17 @@ endif
 PROJECT=autolight
 
 all: src
+.PHONY: src clean install uninstall test
 
-.PHONY: src
 src:
 	@ $(MAKE) -C src/
 
 clean:
 	@ echo Cleaning autolight source tree
 	@ $(MAKE) -C src/ clean
+
+test:
+	@ $(MAKE) -C src/ test
 
 install: bin/$(PROJECT)
 	@ echo Installing to $(DESTDIR)$(PREFIX)/bin...

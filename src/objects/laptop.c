@@ -1,4 +1,6 @@
 #include <stdio.h> // fopen()
+#include <stdlib.h> //EXIT_FAILURE
+#include <errno.h> // errno
 #include <string.h> // strstr()
 #include "../config.h" // cfg
 #include "../io.h" // read_from()
@@ -8,7 +10,11 @@ int check_lid_state() {
 	char lid_state[20];
 
 	FILE * fp_lid = fopen(cfg.files.lid_state, "r");
-	if (fp_lid == NULL) return 1;
+	if (fp_lid == NULL) {
+		fprintf(stderr, "ERROR: Could not open %s: %s\n", cfg.files.lid_state, strerror(errno));
+		fprintf(stderr, "ERROR: Could not get lid state.\n");
+		exit(EXIT_FAILURE);
+	}
 	fgets(lid_state, 19, fp_lid);
 	fclose(fp_lid);
 
@@ -20,8 +26,13 @@ int check_lid_state() {
 
 	return 0;
 }
-void check_plug_state() {
-	laptop.plug_state = read_from(cfg.files.plug_state);
+int check_plug_state() {
+	int result = read_from(cfg.files.plug_state, &laptop.plug_state);
+	if (result == EXIT_FAILURE) {
+		fprintf(stderr, "ERROR: Could not get plug state.\n");
+		exit(EXIT_FAILURE);
+	}
+	return 0;
 }
 
 void laptop_check_states() {

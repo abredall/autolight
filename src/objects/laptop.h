@@ -7,7 +7,7 @@ struct Laptop {
 } laptop;
 
 extern void laptop_initialize();
-extern void check_plug_state();
+extern int check_plug_state();
 extern int check_lid_state();
 extern void laptop_check_states();
 

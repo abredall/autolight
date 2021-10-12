@@ -1,4 +1,7 @@
 #include <stdio.h> // fopen()
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
 #include <math.h> // log()
 #include "../config.h"
 #include "sensor.h"
@@ -9,7 +12,11 @@
 int sensor_update() {
 	long int lux;
 	FILE * fp_lux = fopen(cfg.files.als_lux, "r");
-	if (fp_lux == NULL) return 1;
+	if (fp_lux == NULL) {
+		fprintf(stderr, "ERROR: Could not open %s: %s\n", cfg.files.als_lux, strerror(errno));
+		fprintf(stderr, "ERROR: Could not get lux reading from ALS\n");
+		exit(EXIT_FAILURE);
+	}
 	if (fscanf(fp_lux, "%li", &lux) != 1) return 1;
 	fclose (fp_lux);
 
@@ -48,7 +55,11 @@ int sensor_init_per() {
 		float sensor_freq;
 
 		FILE * fp_sens = fopen(cfg.files.als_freq, "r");
-		if (fp_sens == NULL) return 1;
+		if (fp_sens == NULL) {
+			fprintf(stderr, "ERROR: Could not open %s: %s\n", cfg.files.als_freq, strerror(errno));
+			fprintf(stderr, "ERROR: Could not get ALS frequency\n");
+			exit(EXIT_FAILURE);
+		}
 		if (fscanf(fp_sens, "%f", &sensor_freq) != 1) return 1;
 		fclose(fp_sens);
 		sensor.pol_per=1/sensor_freq;

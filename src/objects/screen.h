@@ -14,6 +14,6 @@ struct Screen {
 
 
 extern void screen_initialize();
-extern void screen_check_bri();
-extern void screen_set_bri();
+extern int screen_check_bri();
+extern int screen_set_bri();
 #endif

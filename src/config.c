@@ -11,7 +11,7 @@ void config_initialize() {
 
 	cfg.scales.min_lux = 50;
 	cfg.scales.max_lux = 1000000;
-	cfg.scales.bri_threshhold_frac = 0.1;
+	cfg.scales.bri_threshhold_frac = 0.3;
 	cfg.scales.bri_unplugged_modifier = 0.9;
 
 	cfg.als.pol_per = 0;

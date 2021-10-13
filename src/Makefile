@@ -27,3 +27,4 @@ clean:
 	@ rm -f *.o
 	@ rm -f *.so
 	@ $(MAKE) -C objects/ clean
+	@ $(MAKE) -C io/ clean

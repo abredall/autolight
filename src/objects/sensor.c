@@ -11,7 +11,7 @@
 #include "../io.h"
 
 int sensor_update() {
-	long int lux;
+	unsigned long int lux;
 	int result = read_long(cfg.files.als_lux, &lux);
 	if (result == EXIT_FAILURE) {
 		fprintf(stderr, "ERROR: Could not get ALS lux.\n");

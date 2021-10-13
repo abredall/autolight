@@ -51,7 +51,7 @@ int sensor_get_bri() {
 int sensor_init_per() {
 	if (cfg.als.pol_per == 0) {
 		float sensor_freq;
-		result = read_float(cfg.files.als_freq, &sensor_freq);
+		int result = read_float(cfg.files.als_freq, &sensor_freq);
 		if (result == EXIT_FAILURE) {
 			fprintf(stderr, "ERROR: Could not get ALS frequency\n");
 			exit(EXIT_FAILURE);

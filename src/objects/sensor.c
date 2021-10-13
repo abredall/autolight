@@ -8,17 +8,15 @@
 #include "laptop.h"
 #include "screen.h"
 #include "../misc.h"
+#include "../io.h"
 
 int sensor_update() {
 	long int lux;
-	FILE * fp_lux = fopen(cfg.files.als_lux, "r");
-	if (fp_lux == NULL) {
-		fprintf(stderr, "ERROR: Could not open %s: %s\n", cfg.files.als_lux, strerror(errno));
-		fprintf(stderr, "ERROR: Could not get lux reading from ALS\n");
+	int result = read_long(cfg.files.als_lux, &lux);
+	if (result == EXIT_FAILURE) {
+		fprintf(stderr, "ERROR: Could not get ALS lux.\n");
 		exit(EXIT_FAILURE);
 	}
-	if (fscanf(fp_lux, "%li", &lux) != 1) return 1;
-	fclose (fp_lux);
 
 	if (lux < cfg.scales.min_lux) {
 		lux = cfg.scales.min_lux;
@@ -53,15 +51,11 @@ int sensor_get_bri() {
 int sensor_init_per() {
 	if (cfg.als.pol_per == 0) {
 		float sensor_freq;
-
-		FILE * fp_sens = fopen(cfg.files.als_freq, "r");
-		if (fp_sens == NULL) {
-			fprintf(stderr, "ERROR: Could not open %s: %s\n", cfg.files.als_freq, strerror(errno));
+		result = read_float(cfg.files.als_freq, &sensor_freq);
+		if (result == EXIT_FAILURE) {
 			fprintf(stderr, "ERROR: Could not get ALS frequency\n");
 			exit(EXIT_FAILURE);
 		}
-		if (fscanf(fp_sens, "%f", &sensor_freq) != 1) return 1;
-		fclose(fp_sens);
 		sensor.pol_per=1/sensor_freq;
 	} else {
 		sensor.pol_per = cfg.als.pol_per;

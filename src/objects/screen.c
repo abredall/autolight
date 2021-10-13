@@ -6,7 +6,7 @@
 #include "screen.h" // screen
 
 int screen_check_bri() {
-	int result = read_from(cfg.files.bri, &screen.curr_bri);
+	int result = read_int(cfg.files.bri, &screen.curr_bri);
 	if (result == EXIT_FAILURE) {
 		fprintf(stderr, "ERROR: Could not get screen brightness.\n");
 		exit(EXIT_FAILURE);
@@ -15,7 +15,7 @@ int screen_check_bri() {
 }
 
 int screen_set_bri() {
-	int result = write_to(cfg.files.bri, screen.curr_bri);
+	int result = write_int(cfg.files.bri, screen.curr_bri);
 	if (result == EXIT_FAILURE) {
 		fprintf(stderr, "ERROR: Could not set screen brightness.\n");
 		exit(EXIT_FAILURE);
@@ -24,7 +24,7 @@ int screen_set_bri() {
 }
 
 int screen_get_max_bri() {
-	int result = read_from(cfg.files.max_bri, &screen.max_bri);
+	int result = read_int(cfg.files.max_bri, &screen.max_bri);
 	if (result == EXIT_FAILURE) {
 		fprintf(stderr, "ERROR: Could not get maximum brightness.\n");
 		exit(EXIT_FAILURE);

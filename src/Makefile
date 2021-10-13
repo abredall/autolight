@@ -16,6 +16,7 @@ print_message:
 
 ../bin/autolight: $(OBJECTS)
 	@ $(MAKE) -C objects/
+	@ $(MAKE) -C io/
 	@ $(CC) *.o $(EXTS) -o $@ -l m
 
 %.o: %.c *.h

@@ -13,8 +13,6 @@ int test_screen(int * n_pass, int * n_fail) {
 	printf("Testing connection to screen...\n");
 
 	int result;
-	*n_pass = 0;
-	*n_fail = 0;
 
 	result = test_read_screen_bri();
 	if (result == EXIT_SUCCESS) {

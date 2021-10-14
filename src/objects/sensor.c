@@ -3,7 +3,7 @@
 #include <errno.h>
 #include <string.h>
 #include <math.h> // log()
-#include "../config.h"
+#include "../cfg.h"
 #include "sensor.h"
 #include "laptop.h"
 #include "screen.h"

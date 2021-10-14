@@ -2,7 +2,7 @@
 #include <stdbool.h> // bool
 #include <stdio.h>
 #include "objects.h"
-#include "config.h"
+#include "cfg.h"
 #include "misc.h"
 
 /* 

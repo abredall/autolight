@@ -4,7 +4,7 @@
 #include <time.h> // usleep()
 #include <string.h> // strstr()
 #include <unistd.h> // sleep()
-#include "config.h"
+#include "cfg.h"
 #include "objects.h"
 #include "chbri.h"
 

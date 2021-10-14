@@ -2,7 +2,7 @@
 #include <stdio.h> //printf
 #include <stdlib.h>
 #include "../io.h" // read_from(), write_to()
-#include "../config.h" // cfg
+#include "../cfg.h" // cfg
 #include "screen.h" // screen
 
 int screen_check_bri() {

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "objects/test.h"
-#include "../src/config.h"
+#include "../src/cfg.h"
 
 int main() {
 	config_initialize();

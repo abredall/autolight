@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include "../../src/config.h"
+#include "../../src/cfg.h"
 
 int test_read_lid_state() {
 	printf("Test: Read lid state... ");

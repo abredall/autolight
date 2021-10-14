@@ -1,5 +1,5 @@
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef CFG_CFG_H
+#define CFG_CFG_H
 
 struct Config {
 	struct Files {

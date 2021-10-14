@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include "../../src/config.h"
+#include "../../src/cfg.h"
 
 extern int test_read_screen_bri();
 extern int test_write_screen_bri();

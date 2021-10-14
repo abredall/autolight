@@ -2,7 +2,7 @@
 #include <stdlib.h> //EXIT_FAILURE
 #include <errno.h> // errno
 #include <string.h> // strstr()
-#include "../config.h" // cfg
+#include "../cfg.h" // cfg
 #include "../io.h" // read_from()
 #include "laptop.h" // laptop
 

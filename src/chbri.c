@@ -3,20 +3,8 @@
 #include <stdio.h>
 #include "objects.h"
 #include "cfg.h"
-#include "misc.h"
 
-/* 
- * Change screen brightness based on input lux value
- * 
- * Parameters 
- * ========== 
- * lux:		A lux value, i.e. from an Ambient Light Sensor (ALS)
- * 
- * Returns 
- * ======= 
- * Truth value of if brightness has changed (1 if changed, 0 otherwise)
- * 
- */ 
+extern float scale_log(long int value, long int min, long int max);
 
 void change_brightness() {
 	int bri_old = screen.curr_bri;
@@ -62,4 +50,8 @@ void change_brightness() {
 	} else {
 		screen.ch_bri = false;
 	}
+}
+
+float scale_log(long int value, long int min, long int max) {
+	return (log(value)-log(min))/(log(max)-log(min));
 }

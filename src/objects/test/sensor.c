@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include "../../src/cfg.h"
+#include "../../cfg.h"
 
 extern int test_read_lux_value();
 extern int test_read_als_freq();

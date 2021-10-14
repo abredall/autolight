@@ -17,7 +17,7 @@ clean:
 	@ $(MAKE) -C test/ clean
 
 test:
-	@ $(MAKE) -C test/ test
+	@ $(MAKE) -C src/ test
 
 install: bin/$(PROJECT)
 	@ echo Installing to $(DESTDIR)$(PREFIX)/bin...

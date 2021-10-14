@@ -1,5 +1,5 @@
-#ifndef SCREEN_H
-#define SCREEN_H
+#ifndef OBJECTS_SCREEN_H
+#define OBJECTS_SCREEN_H
 #include <stdbool.h>
 
 struct Screen {

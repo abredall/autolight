@@ -1,5 +1,5 @@
-#ifndef SENSOR_H
-#define SENSOR_H
+#ifndef OBJECTS_SENSOR_H
+#define OBJECTS_SENSOR_H
 
 extern void sensor_initialize();
 extern int sensor_get_bri();

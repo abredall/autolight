@@ -1,5 +1,5 @@
-#ifndef LAPTOP_H
-#define LAPTOP_H
+#ifndef OBJECTS_LAPTOP_H
+#define OBJECTS_LAPTOP_H
 
 struct Laptop {
 	int lid_state;

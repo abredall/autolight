@@ -13,8 +13,6 @@ src:
 clean:
 	@ echo Cleaning autolight source tree
 	@ $(MAKE) -C src/ clean
-	@ echo Cleaning autolight test tree
-	@ $(MAKE) -C test/ clean
 
 test:
 	@ $(MAKE) -C src/ test

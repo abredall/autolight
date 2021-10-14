@@ -7,7 +7,7 @@
 #include "sensor.h"
 #include "laptop.h"
 #include "screen.h"
-#include "../misc.h"
+#include "../math.h"
 #include "../io.h"
 
 int sensor_update() {

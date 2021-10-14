@@ -8,14 +8,14 @@ all: src test
 .PHONY: src clean install uninstall test
 
 src:
-	@ $(MAKE) -C src/
+	@ $(MAKE) --no-print-directory -C src/
 
 clean:
-	@ echo Cleaning autolight source tree
-	@ $(MAKE) -C src/ clean
+	@ echo Cleaning autolight source tree...
+	@ $(MAKE) --no-print-directory -C src/ clean
 
 test:
-	@ $(MAKE) -C src/ test
+	@ $(MAKE) --no-print-directory -C src/ test
 
 install: bin/$(PROJECT)
 	@ echo Installing to $(DESTDIR)$(PREFIX)/bin...

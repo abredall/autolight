@@ -10,7 +10,7 @@ all: print_message $(OBJECTS) $(SUBDIRS)
 
 .PHONY: print_message
 print_message:
-	@ echo Compiling autolight/test/objects/
+	@ echo Compiling autolight/src/objects/test/
 
 %.o: %.c $(HEADERS)
 	@ $(CC) $(CFLAGS) -c $< -o $@
@@ -21,7 +21,7 @@ $(SUBDIRS):
 
 .PHONY: clean
 clean:
-	@ echo Cleaning autolight/test/objects/
+	@ echo Cleaning autolight/src/objects/test/
 	@ for i in $(OBJECTS); do \
 		rm -f $$i; \
 		done

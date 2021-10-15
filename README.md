@@ -44,7 +44,9 @@ $ autolight
 For best results, configure your system to run the above command at startup.
 
 ## TODO
-- [] feat: allow configuration at runtime
+- [x] feat: allow configuration at runtime
+- [] docs: explain configuration
+- [] docs: comment everything
 
 ## License
 

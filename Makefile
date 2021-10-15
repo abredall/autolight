@@ -21,6 +21,8 @@ install: bin/$(PROJECT)
 	@ echo Installing to $(DESTDIR)$(PREFIX)/bin...
 	@ install -d $(DESTDIR)$(PREFIX)/bin/
 	@ install -m 755 bin/$(PROJECT) $(DESTDIR)$(PREFIX)/bin/
+	@ install -d $(DESTDIR)$(PREFIX)/etc/
+	@ install -m 666 etc/$(PROJECT).conf $(DESTDIR)$(PREFIX)/etc/
 	@ echo Done!
 
 uninstall:

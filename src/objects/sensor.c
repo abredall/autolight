@@ -33,7 +33,7 @@ int sensor_get_bri() {
 	float lux_frac = scale_log(sensor.lux, cfg.scales.min_lux, cfg.scales.max_lux);
 
 	if (!laptop.plug_state) {
-		lux_frac *= cfg.scales.bri_unplugged_modifier;
+		lux_frac *= cfg.scales.bri_unpl_mod;
 	}
 
 	int bri=(int)round(exp(log(screen.max_bri)*lux_frac));

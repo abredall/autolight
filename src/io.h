@@ -3,5 +3,6 @@
 
 #include "io/io.h"
 #include "io/cfg.h"
+#include "io/path.h"
 
 #endif

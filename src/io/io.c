@@ -2,9 +2,9 @@
 #include <stdlib.h> // EXIT_FAILURE
 #include <errno.h> // errno
 #include <string.h> // sterror()
-#include "io.h"
+#include <linux/limits.h>
 
-int read_str(char * file_name, char var[BUFF_SIZE]) {
+int read_str(char * file_name, char var[PATH_MAX]) {
 	FILE * fp_in = fopen(file_name, "r");
 
 	if (fp_in == NULL) {

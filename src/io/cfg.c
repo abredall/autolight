@@ -2,18 +2,16 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include "../cfg.h"
 
-#ifndef BUFF_SIZE
-#define BUFF_SIZE 1024
-#endif
+char * read_cfg_str(char *desired_name) {
+	char name[PATH_MAX];
+	char val[PATH_MAX];
 
-char * read_cfg_str(char * cfg_name, char *desired_name) {
-	char name[BUFF_SIZE];
-	char val[BUFF_SIZE];
-
-	FILE * cfg_in = fopen(cfg_name, "r");
+	FILE * cfg_in = fopen(cfg.fname, "r");
 	if (cfg_in == NULL) {
-		return NULL;
+		fprintf(stderr, "ERROR: Could not read config file %s: %s\n", cfg.fname, strerror(errno));
+		exit(EXIT_FAILURE);
 	}
 
 	while (fscanf(cfg_in, "%1023[^=]=%1023[^\n]%*c", name, val) == 2) {
@@ -25,8 +23,8 @@ char * read_cfg_str(char * cfg_name, char *desired_name) {
 	return NULL;
 }
 
-int read_cfg_long(char * cfg_name, char * desired_name, unsigned long int * ret) {
-    char * temp = read_cfg_str(cfg_name, desired_name);
+int read_cfg_long(char * desired_name, unsigned long int * ret) {
+    char * temp = read_cfg_str(desired_name);
 	if (temp == NULL) return 1;
 
     char * stop;
@@ -36,8 +34,8 @@ int read_cfg_long(char * cfg_name, char * desired_name, unsigned long int * ret)
     return ret_val;
 }
 
-int read_cfg_float(char * cfg_name, char * desired_name, float * ret) {
-    char * temp = read_cfg_str(cfg_name, desired_name);
+int read_cfg_float(char * desired_name, float * ret) {
+    char * temp = read_cfg_str(desired_name);
 	if (temp == NULL) return 1;
 
     char * stop;

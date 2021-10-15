@@ -1,100 +1,93 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <libgen.h>
+#include <errno.h>
+#include <unistd.h>
 #include "cfg.h"
 #include "../io.h"
 
-#ifndef BUFF_SIZE
-#define BUFF_SIZE 1024
-#endif
+void config_initialize(char * BIN_PATH) {
+	char BIN_DIR[PATH_MAX];
 
-// TODO: Make all of these read from a config
-// TODO: Add multi-monitor support
+	memset(BIN_DIR, 0, sizeof(BIN_DIR));
+	if (readlink("/proc/self/exe", BIN_DIR, PATH_MAX) == -1) {
+		fprintf(stderr, "ERROR: Could not get binary path from /proc/self/exe: %s\n", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 
+	dirname(BIN_DIR);
 
-void config_initialize() {
-	char cfg_name[BUFF_SIZE];
-	strcat(strcpy(cfg_name, getenv("HOME")), "/.config/autolight/autolight.conf");
-	
-	char * screen_dev = read_cfg_str(cfg_name, "screen-device");
+	join_paths(cfg.fname, 2, BIN_DIR, REL_CONFIG_PATH);
+
+	char * screen_dev = read_cfg_str("screen-device");
 	if (screen_dev == NULL) {
-		strcpy(screen_dev, "acpi_video0");
+		strcpy(screen_dev, DEF_SCREEN_DEV);
 	}
-	char * plug_dev = read_cfg_str(cfg_name, "plug-device");
+
+	char * plug_dev = read_cfg_str("plug-device");
 	if (plug_dev == NULL) {
-		strcpy(plug_dev, "ADP1");
+		strcpy(plug_dev, DEF_PLUG_DEV);
 	}
-	char * lid_dev = read_cfg_str(cfg_name, "lid-device");
+
+	char * lid_dev = read_cfg_str("lid-device");
 	if (lid_dev == NULL) {
-		strcpy(lid_dev, "LID0");
+		strcpy(lid_dev, DEF_LID_DEV);
 	}
-	char * als_dev = read_cfg_str(cfg_name, "als-device");
+
+	char * als_dev = read_cfg_str("als-device");
 	if (als_dev == NULL) {
-		strcpy(als_dev, "iio:device0");
+		strcpy(als_dev, DEF_ALS_DEV);
 	}
 
-	char * backlight_dir = "/sys/class/backlight/";
-	char * plug_dir = "/sys/class/power_supply/";
-	char * lid_dir = "/proc/acpi/button/lid/";
-	char * als_dir = "/sys/bus/iio/devices/";
+	join_paths(cfg.files.bri, 3, DEF_BACKLIGHT_DIR, screen_dev, DEF_BRI_FNAME);
+	join_paths(cfg.files.max_bri, 3, DEF_BACKLIGHT_DIR, screen_dev, DEF_MAX_BRI_FNAME);
+	join_paths(cfg.files.plug_state, 3, DEF_PLUG_DIR, plug_dev, DEF_PLUG_STATE_FNAME);
+	join_paths(cfg.files.lid_state, 3, DEF_LID_DIR, lid_dev, DEF_LID_STATE_FNAME);
+	join_paths(cfg.files.als_lux, 3, DEF_ALS_DIR, als_dev, DEF_ALS_LUX_FNAME);
+	join_paths(cfg.files.als_freq, 3, DEF_ALS_DIR, als_dev, DEF_ALS_FREQ_FNAME);
 
-	char bri_file[BUFF_SIZE];
-	strcat(strcat(strcpy(bri_file, backlight_dir), screen_dev), "/brightness");
-
-	char max_bri_file[BUFF_SIZE];
-	strcat(strcat(strcpy(max_bri_file, backlight_dir), screen_dev), "/max_brightness");
-
-	char plug_state_file[BUFF_SIZE];
-	strcat(strcat(strcpy(plug_state_file, plug_dir), plug_dev), "/online");
-
-	char lid_state_file[BUFF_SIZE];
-	strcat(strcat(strcpy(lid_state_file, lid_dir), lid_dev), "/state");
-
-	char als_lux_file[BUFF_SIZE];
-	strcat(strcat(strcpy(als_lux_file, als_dir), als_dev), "/in_illuminance_input");
-
-	char als_freq_file[BUFF_SIZE];
-	strcat(strcat(strcpy(als_freq_file, als_dir), als_dev), "/in_illuminance_sampling_frequency");
-
-	cfg.files.bri = bri_file;
-	cfg.files.max_bri = max_bri_file;
-	cfg.files.plug_state = plug_state_file;
-	cfg.files.lid_state = lid_state_file;
-	cfg.files.als_lux = als_lux_file;
-	cfg.files.als_freq = als_freq_file;
-
-	unsigned long int min_lux; unsigned long int max_lux;
-	float bri_thresh_frac; float bri_unpl_mod; float als_pol_per;
+	free(screen_dev);
+	free(plug_dev);
+	free(lid_dev);
+	free(als_dev);
 
 	int result;
 
-	result = read_cfg_long(cfg_name, "als-min-lux", &min_lux);
+	unsigned long int min_lux;
+	result = read_cfg_long(OPT_ALS_MIN_LUX, &min_lux);
 	if (result != 0) {
-		min_lux = 50;
-	}
-	result = read_cfg_long(cfg_name, "als-max-lux", &max_lux);
-	if (result != 0) {
-		max_lux = 1000000;
-	}
-	result = read_cfg_float(cfg_name, "als-polling-period", &als_pol_per);
-	if (result != 0) {
-		als_pol_per = 0;
-	}
-	result = read_cfg_float(cfg_name, "brightness-threshold-fraction", &bri_thresh_frac);
-	if (result != 0) {
-		bri_thresh_frac = 0.3;
-	}
-	result = read_cfg_float(cfg_name, "brightness-unplugged-modifier", &bri_unpl_mod);
-	if (result != 0) {
-		bri_unpl_mod = 0.9;
+		min_lux = DEF_MIN_LUX;
 	}
 
+	unsigned long int max_lux;
+	result = read_cfg_long(OPT_ALS_MAX_LUX, &max_lux);
+	if (result != 0) {
+		max_lux = DEF_MAX_LUX;
+	}
+
+	float bri_thresh_frac;
+	result = read_cfg_float(OPT_BRI_THRESH_FRAC, &bri_thresh_frac);
+	if (result != 0) {
+		bri_thresh_frac = DEF_BRI_THRESH_FRAC;
+	}
+
+	float bri_unpl_mod;
+	result = read_cfg_float(OPT_BRI_UNPL_MOD, &bri_unpl_mod);
+	if (result != 0) {
+		bri_unpl_mod = DEF_BRI_UNPL_MOD;
+	}
+
+	float als_pol_per;
+	result = read_cfg_float(OPT_ALS_POL_PER, &als_pol_per);
+	if (result != 0) {
+		als_pol_per = DEF_ALS_POL_PER;
+	}
 
 	cfg.scales.min_lux = min_lux;
 	cfg.scales.max_lux = max_lux;
-	cfg.scales.bri_threshhold_frac = bri_thresh_frac;
-	cfg.scales.bri_unplugged_modifier = bri_unpl_mod;
+	cfg.scales.bri_thresh_frac = bri_thresh_frac;
+	cfg.scales.bri_unpl_mod = bri_unpl_mod;
 
 	cfg.als.pol_per = als_pol_per;
-	
 }

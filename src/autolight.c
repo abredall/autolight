@@ -8,8 +8,8 @@
 
 extern void change_brightness();
 
-int main() {
-	config_initialize();
+int main(int argc, char **argv) {
+	config_initialize(argv[0]);
 	screen_initialize();
 	sensor_initialize();
 	laptop_initialize();
@@ -58,7 +58,7 @@ void change_brightness() {
 
 	/* if we're not currently changing the brightness, only start if the threshold has been reached */
 	char change_bri;
-	if (frac_diff > cfg.scales.bri_threshhold_frac && !screen.ch_bri) {
+	if (frac_diff > cfg.scales.bri_thresh_frac && !screen.ch_bri) {
 		change_bri=1;
 	} else if (bri_new != bri_old && screen.ch_bri){
 		change_bri=1;

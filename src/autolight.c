@@ -53,13 +53,13 @@ void change_brightness() {
 	int bri_old = screen.curr_bri;
 	int kbd_bri_old = kbd.curr_bri;
 	float bri_frac_old = scale_log(bri_old, screen.min_bri, screen.max_bri);
-	float kbd_bri_frac_old = scale_log(kbd_bri_old, kbd.min_bri, kbd.max_bri);
+	float kbd_bri_frac_old = scale_lin(kbd_bri_old, kbd.min_bri, kbd.max_bri);
 
 	sensor_update();
 	int bri_new = sensor_get_bri();
 	int kbd_bri_new = sensor_get_kbd_bri();
 	float bri_frac_new = scale_log(bri_new, screen.min_bri, screen.max_bri);
-	float kbd_bri_frac_new = scale_log(kbd_bri_new, screen.min_bri, screen.max_bri);
+	float kbd_bri_frac_new = scale_lin(kbd_bri_new, kbd.min_bri, kbd.max_bri);
 
 	float frac_diff=fabs(bri_frac_new-bri_frac_old);
 	float frac_kbd_diff = fabs(kbd_bri_frac_new-kbd_bri_frac_old);

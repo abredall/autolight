@@ -2,5 +2,6 @@
 #define MATH_FUNCTIONS_H
 
 extern float scale_log(long int value, long int min, long int max);
+extern float scale_lin(long int value, long int min, long int max);
 
 #endif

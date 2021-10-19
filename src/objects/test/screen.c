@@ -43,7 +43,7 @@ int test_read_screen_bri() {
 	FILE * fp_in = fopen(cfg.files.bri, "r");
 
 	if (fp_in == NULL) {
-		printf("Failed: %s\n", strerror(errno));
+		printf("Failed\n - Could not read %s: %s\n", cfg.files.bri, strerror(errno));
 		return EXIT_FAILURE;
 	}
 
@@ -57,7 +57,7 @@ int test_write_screen_bri() {
 	FILE * fp_out = fopen(cfg.files.bri, "w");
 
 	if (fp_out == NULL) {
-		printf("Failed: %s\n", strerror(errno));
+		printf("Failed\n - Could not write to %s: %s\n", cfg.files.bri, strerror(errno));
 		return EXIT_FAILURE;
 	}
 
@@ -71,7 +71,7 @@ int test_read_screen_max_bri() {
 	FILE * fp_in = fopen(cfg.files.max_bri, "r");
 
 	if (fp_in == NULL) {
-		printf("Failed: %s\n", strerror(errno));
+		printf("Failed\n - Could not read %s: %s\n", cfg.files.max_bri, strerror(errno));
 		return EXIT_FAILURE;
 	}
 

@@ -35,7 +35,7 @@ int test_read_lux_value() {
 	FILE * fp_in = fopen(cfg.files.als_lux, "r");
 
 	if (fp_in == NULL) {
-		printf("Failed: %s\n", strerror(errno));
+		printf("Failed\n - Could not read %s: %s\n", cfg.files.als_lux, strerror(errno));
 		return EXIT_FAILURE;
 	}
 
@@ -49,7 +49,7 @@ int test_read_als_freq() {
 	FILE * fp_in = fopen(cfg.files.als_freq, "r");
 
 	if (fp_in == NULL) {
-		printf("Failed: %s\n", strerror(errno));
+		printf("Failed\n - Could not read %s: %s\n", cfg.files.als_freq, strerror(errno));
 		return EXIT_FAILURE;
 	}
 

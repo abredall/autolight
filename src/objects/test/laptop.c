@@ -35,7 +35,7 @@ int test_read_lid_state() {
 	FILE * fp_in = fopen(cfg.files.lid_state, "r");
 
 	if (fp_in == NULL) {
-		printf("Failed\n    Cannot read from %s: %s\n", cfg.files.lid_state, strerror(errno));
+		printf("Failed\n - Could not read %s: %s\n", cfg.files.lid_state, strerror(errno));
 		return EXIT_FAILURE;
 	}
 
@@ -49,7 +49,7 @@ int test_read_plug_state() {
 	FILE * fp_in = fopen(cfg.files.plug_state, "r");
 
 	if (fp_in == NULL) {
-		printf("Failed\n    Cannot read from %s: %s\n", cfg.files.plug_state, strerror(errno));
+		printf("Failed\n - Could not read %s: %s\n", cfg.files.plug_state, strerror(errno));
 		return EXIT_FAILURE;
 	}
 

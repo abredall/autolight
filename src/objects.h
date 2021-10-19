@@ -2,6 +2,7 @@
 #define OBJECTS_H
 
 #include "objects/screen.h"
+#include "objects/kbd.h"
 #include "objects/laptop.h"
 #include "objects/sensor.h"
 

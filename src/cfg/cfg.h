@@ -8,6 +8,8 @@ struct Config {
 	struct Files {
 		char bri[PATH_MAX];
 		char max_bri[PATH_MAX];
+		char kbd_bri[PATH_MAX];
+		char kbd_max_bri[PATH_MAX];
 		char plug_state[PATH_MAX];
 		char lid_state[PATH_MAX];
 		char als_lux[PATH_MAX];
@@ -31,6 +33,7 @@ extern void config_initialize(char * BIN_PATH);
 #define REL_CONFIG_PATH "../etc/autolight.conf"
 
 #define OPT_SCREEN_DEV "screen-device"
+#define OPT_KBD_DEV "kbd-device"
 #define OPT_PLUG_DEV "plug-device"
 #define OPT_LID_DEV "lid-device"
 #define OPT_ALS_DEV "als-device"
@@ -41,17 +44,21 @@ extern void config_initialize(char * BIN_PATH);
 #define OPT_BRI_UNPL_MOD "brightness-unplugged-modifier"
 
 #define DEF_SCREEN_DEV "acpi_video0"
+#define DEF_KBD_DEV "apple::kbd_backlight"
 #define DEF_PLUG_DEV "ADP1"
 #define DEF_LID_DEV "LID0"
 #define DEF_ALS_DEV "iio:device0"
 
 #define DEF_BACKLIGHT_DIR "/sys/class/backlight"
+#define DEF_KBD_DIR "/sys/class/leds"
 #define DEF_PLUG_DIR "/sys/class/power_supply"
 #define DEF_LID_DIR "/proc/acpi/button/lid"
 #define DEF_ALS_DIR "/sys/bus/iio/devices"
 
 #define DEF_BRI_FNAME "brightness"
 #define DEF_MAX_BRI_FNAME "max_brightness"
+#define DEF_KBD_BRI_FNAME "brightness"
+#define DEF_KBD_MAX_BRI_FNAME "max_brightness"
 #define DEF_PLUG_STATE_FNAME "online"
 #define DEF_LID_STATE_FNAME "state"
 #define DEF_ALS_LUX_FNAME "in_illuminance_input"

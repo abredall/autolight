@@ -7,6 +7,7 @@
 #include "sensor.h"
 #include "laptop.h"
 #include "screen.h"
+#include "kbd.h"
 #include "../math.h"
 #include "../io.h"
 
@@ -43,6 +44,26 @@ int sensor_get_bri() {
 	}
 	else if (bri > screen.max_bri) {
 		bri=screen.max_bri;
+	}
+
+	return bri;
+}
+
+int sensor_get_kbd_bri() {
+	/* we use logspace because humans see logarithmically */
+	float lux_frac = scale_log(sensor.lux, cfg.scales.min_lux, cfg.scales.max_lux);
+
+	if (!laptop.plug_state) {
+		lux_frac *= (2-cfg.scales.bri_unpl_mod);
+	}
+	
+	int bri=(int)round(kbd.max_bri*(1-lux_frac));
+
+	if (bri < kbd.min_bri) {
+		bri=kbd.min_bri;
+	}
+	else if (bri > kbd.max_bri) {
+		bri=kbd.max_bri;
 	}
 
 	return bri;

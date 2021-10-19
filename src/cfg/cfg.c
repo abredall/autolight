@@ -25,6 +25,11 @@ void config_initialize(char * BIN_PATH) {
 		strcpy(screen_dev, DEF_SCREEN_DEV);
 	}
 
+	char * kbd_dev = read_cfg_str("kbd-device");
+	if (kbd_dev == NULL) {
+		strcpy(kbd_dev, DEF_KBD_DEV);
+	}
+
 	char * plug_dev = read_cfg_str("plug-device");
 	if (plug_dev == NULL) {
 		strcpy(plug_dev, DEF_PLUG_DEV);
@@ -42,12 +47,15 @@ void config_initialize(char * BIN_PATH) {
 
 	join_paths(cfg.files.bri, 3, DEF_BACKLIGHT_DIR, screen_dev, DEF_BRI_FNAME);
 	join_paths(cfg.files.max_bri, 3, DEF_BACKLIGHT_DIR, screen_dev, DEF_MAX_BRI_FNAME);
+	join_paths(cfg.files.kbd_bri, 3, DEF_KBD_DIR, kbd_dev, DEF_KBD_BRI_FNAME);
+	join_paths(cfg.files.kbd_max_bri, 3, DEF_KBD_DIR, kbd_dev, DEF_KBD_MAX_BRI_FNAME);
 	join_paths(cfg.files.plug_state, 3, DEF_PLUG_DIR, plug_dev, DEF_PLUG_STATE_FNAME);
 	join_paths(cfg.files.lid_state, 3, DEF_LID_DIR, lid_dev, DEF_LID_STATE_FNAME);
 	join_paths(cfg.files.als_lux, 3, DEF_ALS_DIR, als_dev, DEF_ALS_LUX_FNAME);
 	join_paths(cfg.files.als_freq, 3, DEF_ALS_DIR, als_dev, DEF_ALS_FREQ_FNAME);
 
 	free(screen_dev);
+	free(kbd_dev);
 	free(plug_dev);
 	free(lid_dev);
 	free(als_dev);

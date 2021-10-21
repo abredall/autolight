@@ -1,0 +1,150 @@
+#!/bin/env bash
+cfg_path="etc/autolight.conf"
+
+# Setting names in config
+screen_opt="screen-device"
+als_opt="als-device"
+kbd_opt="kbd-device"
+plug_opt="plug-device"
+lid_opt="lid-device"
+minlux_opt="als-min-lux"
+maxlux_opt="als-max-lux"
+polper_opt="als-polling-period"
+brithresh_opt="brightness-threshold-fraction"
+briunpl_opt="brightness-unplugged-modifier"
+
+# Default values
+minlux_def=50
+maxlux_def=1000000
+polper_def=0
+brithresh_def=0.3
+briunpl_def=0.9
+
+cfg=`cat $cfg_path 2> /dev/null`
+
+# Search for screen device
+# TODO: Find a better way to do this?
+if [[ "$cfg" != *"$screen_opt"* ]]; then
+	backlight_path=`find /sys/class/backlight/* | head -n 1`
+	if [[ -z $backlight_path ]]; then
+		echo "ERROR: Could not find screen device!"
+		exit 1
+	fi
+	screen_dev=`basename $backlight_path`
+	echo $'Screen:\t' "$screen_dev"
+	echo "$screen_opt=$screen_dev" >> $cfg_path
+fi
+
+# Search for ALS device
+if [[ "$cfg" != *"$als_opt"* ]]; then
+	name_file=`grep -srl "^als$" /sys/bus/iio/devices/*`
+	if [[ -z $name_file ]]; then
+		echo "ERROR: Could not find ALS device!"
+		exit 1
+	fi
+	als_path=`dirname $name_file`
+	als_dev=`basename $als_path`
+	echo $'ALS:\t' "$als_dev"
+	echo "$als_opt=$als_dev" >> $cfg_path
+fi
+
+# Search for kbd backlight
+if [[ "$cfg" != *"$kbd_opt"* ]]; then
+	kbd_led_path=`find /sys/class/leds -name "*kbd_backlight"`
+	if [[ -z $kbd_led_path ]]; then
+		echo "ERROR: Could not find keyboard backlight!"
+		exit 1
+	fi
+	kbd_dev=`basename $kbd_led_path`
+	echo $'Kbd:\t' "$kbd_dev"
+	echo "$kbd_opt=$kbd_dev" >> $cfg_path
+fi
+
+# Search for AC adapter
+# TODO: Find a better way to do this?
+if [[ "$cfg" != *"$plug_opt"* ]]; then
+	plug_path=`find /sys/class/power_supply/ADP* | head -n 1`
+	if [[ -z $plug_path ]]; then
+		echo "ERROR: Could not find AC Adapter!"
+		exit 1
+	fi
+	plug_dev=`basename $plug_path`
+	echo $'AC:\t' "$plug_dev"
+	echo "$plug_opt=$plug_dev" >> $cfg_path
+fi
+
+# Search for lid button
+# TODO: Find a better way to do this?
+if [[ "$cfg" != *"$lid_opt"* ]]; then
+	lid_path=`find /proc/acpi/button/lid/* | head -n 1`
+	if [[ -z $lid_path ]]; then
+		echo "ERROR: Could not find lid button!"
+		exit 1
+	fi
+	lid_dev=`basename $lid_path`
+	echo $'Lid:\t' "$lid_dev"
+	echo "$lid_opt=$lid_dev" >> $cfg_path
+fi
+
+# Use default for the rest
+if [[ "$cfg" != *"$minlux_opt"* ]]; then
+	echo "$minlux_opt=$minlux_def" >> $cfg_path
+fi
+
+if [[ "$cfg" != *"$maxlux_opt"* ]]; then
+	echo "$maxlux_opt=$maxlux_def" >> $cfg_path
+fi
+
+if [[ "$cfg" != *"$polper_opt"* ]]; then
+	echo "$polper_opt=$polper_def" >> $cfg_path
+fi
+
+if [[ "$cfg" != *"$brithresh_opt"* ]]; then
+	echo "$brithresh_opt=$brithresh_def" >> $cfg_path
+fi
+
+if [[ "$cfg" != *"$briunpl_opt"* ]]; then
+	echo "$briunpl_opt=$briunpl_def" >> $cfg_path
+fi
+
+
+# Generate Makefile (this prevents users from running make before configuring)
+makefile=$'# -*- MakeFile -*-
+ifeq ($(PREFIX),)
+	PREFIX := /usr/local
+endif
+PROJECT=autolight
+
+all: src test
+.PHONY: src clean install uninstall test
+
+src:
+	@ $(MAKE) --no-print-directory -C src/
+
+clean:
+	@ echo Cleaning autolight source tree...
+	@ $(MAKE) --no-print-directory -C src/ clean
+
+distclean: clean
+	@ echo Removing configuration..
+	@ rm etc/autolight.conf
+	@ echo Done!
+	@ rm Makefile
+
+test:
+	@ $(MAKE) --no-print-directory -C src/ test
+
+install: bin/$(PROJECT)
+	@ echo Installing to $(DESTDIR)$(PREFIX)/bin...
+	@ install -d $(DESTDIR)$(PREFIX)/bin/
+	@ install -m 755 bin/$(PROJECT) $(DESTDIR)$(PREFIX)/bin/
+	@ install -d $(DESTDIR)$(PREFIX)/etc/
+	@ install -m 666 etc/$(PROJECT).conf $(DESTDIR)$(PREFIX)/etc/
+	@ echo Done!
+
+uninstall:
+	@ echo Uninstalling from $(DESTDIR)$(PREFIX)/bin...
+	@ rm -f $(DESTDIR)$(PREFIX)/bin/$(PROJECT)
+	@ echo Done!
+'
+echo "$makefile" > Makefile

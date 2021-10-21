@@ -50,52 +50,65 @@ int main(int argc, char **argv) {
 }
 
 void change_brightness() {
-	int bri_old = screen.curr_bri;
-	int kbd_bri_old = kbd.curr_bri;
-	float bri_frac_old = scale_log(bri_old, screen.min_bri, screen.max_bri);
-	float kbd_bri_frac_old = scale_lin(kbd_bri_old, kbd.min_bri, kbd.max_bri);
+	// First, we grab everything we need from the last time the sensor was used
+	int bri_old;
+	if (screen.online) bri_old = screen.curr_bri;
+
+	int kbd_bri_old;
+	if (kbd.online) kbd_bri_old = kbd.curr_bri;
 
 	sensor_update();
-	int bri_new = sensor_get_bri();
-	int kbd_bri_new = sensor_get_kbd_bri();
-	float bri_frac_new = scale_log(bri_new, screen.min_bri, screen.max_bri);
-	float kbd_bri_frac_new = scale_lin(kbd_bri_new, kbd.min_bri, kbd.max_bri);
 
-	float frac_diff=fabs(bri_frac_new-bri_frac_old);
-	float frac_kbd_diff = fabs(kbd_bri_frac_new-kbd_bri_frac_old);
+	int bri_new;
+	if (screen.online) bri_new = sensor_get_bri();
 
-	/* if we're not currently changing the brightness, only start if the threshold has been reached */
+	int kbd_bri_new;
+	if (kbd.online) kbd_bri_new = sensor_get_kbd_bri();
+
 	char change_bri;
-	if (frac_diff > cfg.scales.bri_thresh_frac && !screen.ch_bri) {
-		change_bri=1;
-	} else if (bri_new != bri_old && screen.ch_bri){
-		change_bri=1;
-	} else {
-		change_bri=0;
+	if (screen.online) {
+		float bri_frac_old = scale_log(bri_old, screen.min_bri, screen.max_bri);
+		float bri_frac_new = scale_log(bri_new, screen.min_bri, screen.max_bri);
+
+		float frac_diff=fabs(bri_frac_new-bri_frac_old);
+
+		if (frac_diff > cfg.scales.bri_thresh_frac && !screen.ch_bri) {
+			change_bri=1;
+		} else if (bri_new != bri_old && screen.ch_bri){
+			change_bri=1;
+		} else {
+			change_bri=0;
+		}
 	}
 
 	char change_kbd_bri;
-	if (frac_kbd_diff > cfg.scales.bri_thresh_frac && !kbd.ch_bri) {
-		change_kbd_bri=1;
-	} else if (kbd_bri_new != kbd_bri_old && kbd.ch_bri){
-		change_kbd_bri=1;
-	} else {
-		change_kbd_bri=0;
+	if (kbd.online) {
+		float kbd_bri_frac_old = scale_lin(kbd_bri_old, kbd.min_bri, kbd.max_bri);
+		float kbd_bri_frac_new = scale_lin(kbd_bri_new, kbd.min_bri, kbd.max_bri);
+
+		float frac_kbd_diff = fabs(kbd_bri_frac_new-kbd_bri_frac_old);
+
+		if (frac_kbd_diff > cfg.scales.bri_thresh_frac && !kbd.ch_bri) {
+			change_kbd_bri=1;
+		} else if (kbd_bri_new != kbd_bri_old && kbd.ch_bri){
+			change_kbd_bri=1;
+		} else {
+			change_kbd_bri=0;
+		}
 	}
 
-	/* always change the brightness when plugged in or unplugged */
-	int plug_state_old = laptop.plug_state;
-
-	check_plug_state();
-
-	int plug_state_new = laptop.plug_state;
-
-	if (plug_state_new != plug_state_old) {
-		change_bri=1;
-		change_kbd_bri=1;
+	// Always change the brightness when plugged in or unplugged
+	if (laptop.plug_online) {
+		int plug_state_old = laptop.plug_state;
+		check_plug_state();
+		int plug_state_new = laptop.plug_state;
+		if (plug_state_new != plug_state_old) {
+			change_bri=1;
+			change_kbd_bri=1;
+		}
 	}
 
-	if (change_bri) {
+	if (change_bri && screen.online) {
 		if (bri_new > bri_old) {
 			screen.curr_bri += 1;
 		} else if (bri_new < bri_old) {
@@ -109,7 +122,7 @@ void change_brightness() {
 		screen.ch_bri = false;
 	}
 
-	if (change_kbd_bri) {
+	if (change_kbd_bri && kbd.online) {
 		if (kbd_bri_new > kbd_bri_old) {
 			kbd.curr_bri += 1;
 		} else if (kbd_bri_new < kbd_bri_old) {

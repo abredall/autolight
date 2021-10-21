@@ -30,7 +30,7 @@ int sensor_update() {
 }
 
 int sensor_get_bri() {
-	/* we use logspace because humans see logarithmically */
+	// We use logspace because humans see logarithmically
 	float lux_frac = scale_log(sensor.lux, cfg.scales.min_lux, cfg.scales.max_lux);
 
 	if (!laptop.plug_state) {
@@ -50,7 +50,7 @@ int sensor_get_bri() {
 }
 
 int sensor_get_kbd_bri() {
-	/* we use logspace because humans see logarithmically */
+	// We use logspace because humans see logarithmically
 	float lux_frac = scale_log(sensor.lux, cfg.scales.min_lux, cfg.scales.max_lux);
 
 	if (!laptop.plug_state) {
@@ -85,6 +85,11 @@ int sensor_init_per() {
 }
 
 void sensor_initialize() {
-	sensor_init_per();
-	sensor_update();
+	if (sensor.online) {
+		sensor_init_per();
+		sensor_update();
+	} else {
+		fprintf(stderr, "ERROR: Cannot connect to ALS\n");
+		exit(EXIT_FAILURE);
+	}
 }

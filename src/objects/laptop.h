@@ -4,6 +4,10 @@
 struct Laptop {
 	int lid_state;
 	int plug_state;
+
+	// Whether autolight can connect to the lid or adapter
+	int lid_online;
+	int plug_online;
 } laptop;
 
 extern void laptop_initialize();

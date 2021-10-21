@@ -3,6 +3,9 @@
 #include <stdbool.h>
 
 struct Keyboard {
+	// Whether autolight can connect to the keyboard
+	int online;
+
 	// Min, max, and current brightness
 	int min_bri;
 	int max_bri;
@@ -10,6 +13,7 @@ struct Keyboard {
 
 	// Whether the brightness is currently changing
 	bool ch_bri;
+
 } kbd;
 
 

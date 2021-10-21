@@ -8,6 +8,9 @@ extern int sensor_update();
 extern int sensor_init_per();
 
 struct Sensor {
+	// Whether autolight can connect to the sensor
+	int online;
+
 	long int lux;
 	float pol_per;
 } sensor;

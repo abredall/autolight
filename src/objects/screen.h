@@ -3,6 +3,9 @@
 #include <stdbool.h>
 
 struct Screen {
+	// Whether autolight can connect to the screen
+	int online;
+
 	// Min, max, and current brightness
 	int min_bri;
 	int max_bri;
@@ -10,6 +13,7 @@ struct Screen {
 
 	// Whether the brightness is currently changing
 	bool ch_bri;
+
 } screen;
 
 

@@ -33,9 +33,11 @@ int kbd_get_max_bri() {
 }
 
 void kbd_initialize() {
-	kbd.min_bri = 0;
-	kbd_get_max_bri();
-	kbd_check_bri();
-	kbd.ch_bri = false;
+	if (kbd.online) {
+		kbd.min_bri = 0;
+		kbd_get_max_bri();
+		kbd_check_bri();
+		kbd.ch_bri = false;
+	}
 }
 

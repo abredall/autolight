@@ -31,8 +31,12 @@ int check_plug_state() {
 }
 
 void laptop_check_states() {
-	check_lid_state();
-	check_plug_state();
+	if (laptop.lid_online) {
+		check_lid_state();
+	}
+	if (laptop.plug_online) {
+		check_plug_state();
+	}
 }
 
 void laptop_initialize() {

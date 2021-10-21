@@ -1,6 +1,7 @@
 #include <stdbool.h> // bool
 #include <stdio.h> //printf
 #include <stdlib.h>
+#include <dirent.h>
 #include "../io.h" // read_from(), write_to()
 #include "../cfg.h" // cfg
 #include "screen.h" // screen
@@ -33,9 +34,11 @@ int screen_get_max_bri() {
 }
 
 void screen_initialize() {
-	screen.min_bri = 1;
-	screen_get_max_bri();
-	screen_check_bri();
-	screen.ch_bri = false;
+	if (screen.online) {
+		screen.min_bri = 1;
+		screen_get_max_bri();
+		screen_check_bri();
+		screen.ch_bri = false;
+	}
 }
 

@@ -5,6 +5,14 @@
 struct Config {
 	char fname[PATH_MAX];
 
+	struct Devs {
+		char screen[PATH_MAX];
+		char kbd[PATH_MAX];
+		char als[PATH_MAX];
+		char plug[PATH_MAX];
+		char lid[PATH_MAX];
+	} devs;
+
 	struct Files {
 		char bri[PATH_MAX];
 		char max_bri[PATH_MAX];
@@ -43,11 +51,11 @@ extern void config_initialize(char * BIN_PATH);
 #define OPT_BRI_THRESH_FRAC "brightness-threshold-fraction"
 #define OPT_BRI_UNPL_MOD "brightness-unplugged-modifier"
 
-#define DEF_SCREEN_DEV "acpi_video0"
-#define DEF_KBD_DEV "apple::kbd_backlight"
-#define DEF_PLUG_DEV "ADP1"
-#define DEF_LID_DEV "LID0"
-#define DEF_ALS_DEV "iio:device0"
+#define DEF_SCREEN_DEV ""
+#define DEF_KBD_DEV ""
+#define DEF_PLUG_DEV ""
+#define DEF_LID_DEV ""
+#define DEF_ALS_DEV ""
 
 #define DEF_BACKLIGHT_DIR "/sys/class/backlight"
 #define DEF_KBD_DIR "/sys/class/leds"

@@ -4,12 +4,14 @@
 #include <errno.h>
 #include <string.h>
 #include "../../cfg.h"
+#include "../../objects.h"
 
 extern int test_read_lux_value();
 extern int test_read_als_freq();
 
 int test_sensor(int * n_pass, int * n_fail) {
 	printf("Testing connection to sensor...\n");
+	fflush(stdout);
 
 	int result;
 
@@ -30,30 +32,55 @@ int test_sensor(int * n_pass, int * n_fail) {
 	return 0;
 }
 
+void print_als_not_connected();
+
 int test_read_lux_value() {
 	printf("Test: Read lux value... ");
+	fflush(stdout);
+
+	if (!sensor.online) {
+		print_als_not_connected();
+		return EXIT_FAILURE;
+	}
+
 	FILE * fp_in = fopen(cfg.files.als_lux, "r");
 
 	if (fp_in == NULL) {
 		printf("Failed\n - Could not read %s: %s\n", cfg.files.als_lux, strerror(errno));
+		fflush(stdout);
 		return EXIT_FAILURE;
 	}
 
 	fclose(fp_in);
 	printf("Passed!\n");
+	fflush(stdout);
 	return EXIT_SUCCESS;
 }
 
 int test_read_als_freq() {
 	printf("Test: Read ALS frequency... ");
+	fflush(stdout);
+
+	if (!sensor.online) {
+		print_als_not_connected();
+		return EXIT_FAILURE;
+	}
+
 	FILE * fp_in = fopen(cfg.files.als_freq, "r");
 
 	if (fp_in == NULL) {
 		printf("Failed\n - Could not read %s: %s\n", cfg.files.als_freq, strerror(errno));
+		fflush(stdout);
 		return EXIT_FAILURE;
 	}
 
 	fclose(fp_in);
 	printf("Passed!\n");
+	fflush(stdout);
 	return EXIT_SUCCESS;
+}
+
+void print_als_not_connected() {
+	printf("Failed\n  ->Could not connect to ALS.\n");
+	fflush(stdout);
 }

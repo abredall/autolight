@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <string.h>
 #include "../../cfg.h"
+#include "../../objects.h"
 
 extern int test_read_screen_bri();
 extern int test_write_screen_bri();
@@ -11,6 +12,7 @@ extern int test_read_screen_max_bri();
 
 int test_screen(int * n_pass, int * n_fail) {
 	printf("Testing connection to screen...\n");
+	fflush(stdout);
 
 	int result;
 
@@ -38,44 +40,78 @@ int test_screen(int * n_pass, int * n_fail) {
 	return 0;
 }
 
+void print_screen_not_connected();
+
 int test_read_screen_bri() {
 	printf("Test: Read screen brightness... ");
+	fflush(stdout);
+
+	if (!screen.online) {
+		print_screen_not_connected();
+		return EXIT_FAILURE;
+	}
+
 	FILE * fp_in = fopen(cfg.files.bri, "r");
 
 	if (fp_in == NULL) {
 		printf("Failed\n - Could not read %s: %s\n", cfg.files.bri, strerror(errno));
+		fflush(stdout);
 		return EXIT_FAILURE;
 	}
 
 	fclose(fp_in);
 	printf("Passed!\n");
+	fflush(stdout);
 	return EXIT_SUCCESS;
 }
 
 int test_write_screen_bri() {
 	printf("Test: Write screen brightness... ");
+	fflush(stdout);
+
+	if (!screen.online) {
+		print_screen_not_connected();
+		return EXIT_FAILURE;
+	}
+
 	FILE * fp_out = fopen(cfg.files.bri, "w");
 
 	if (fp_out == NULL) {
 		printf("Failed\n - Could not write to %s: %s\n", cfg.files.bri, strerror(errno));
+		fflush(stdout);
 		return EXIT_FAILURE;
 	}
 
 	fclose(fp_out);
 	printf("Passed!\n");
+	fflush(stdout);
 	return EXIT_SUCCESS;
 }
 
 int test_read_screen_max_bri() {
 	printf("Test: Read screen max brightness... ");
+	fflush(stdout);
+
+	if (!screen.online) {
+		print_screen_not_connected();
+		return EXIT_FAILURE;
+	}
+
 	FILE * fp_in = fopen(cfg.files.max_bri, "r");
 
 	if (fp_in == NULL) {
 		printf("Failed\n - Could not read %s: %s\n", cfg.files.max_bri, strerror(errno));
+		fflush(stdout);
 		return EXIT_FAILURE;
 	}
 
 	fclose(fp_in);
 	printf("Passed!\n");
+	fflush(stdout);
 	return EXIT_SUCCESS;
+}
+
+void print_screen_not_connected() {
+	printf("Failed\n - Could not connect to screen.\n");
+	fflush(stdout);
 }

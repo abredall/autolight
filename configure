@@ -22,6 +22,11 @@ briunpl_def=0.9
 
 cfg=`cat $cfg_path 2> /dev/null`
 
+if [[ ! -d "etc" ]]; then
+	mkdir etc
+fi
+
+
 # Search for screen device
 # TODO: Find a better way to do this?
 if [[ "$cfg" != *"$screen_opt"* ]]; then

@@ -19,13 +19,15 @@ autolight is a small C program that reads lux values from the ambient light sens
 $ git clone https://github.com/jbredall/autolight.git
 $ cd autolight
 ```
-2. To build autolight and run tests, run:
+2. Configure autolight to run on your system first by running:
+```
+$ ./configure
+```
+3. To build autolight and run tests, run:
 ```
 $ make
 ```
-Make sure all the tests pass before installing, or else autolight won't run properly.
-
-3. To install autolight, then run:
+4. To install autolight, then run:
 ```
 $ sudo make install # installs to /usr/local/bin
 ```
@@ -41,10 +43,11 @@ To use autolight, simply run
 ```
 $ autolight
 ```
-For best results, configure your system to run the above command at startup.
+For best results, configure your system to run the above command in the background at startup.
 
 ## TODO
-- [x] feat: allow configuration at runtime
+- [x] feat: allow configuration between runtime
+- [x] feat: disable features if devices are not found
 - [] docs: explain configuration
 - [] docs: comment everything
 

@@ -32,8 +32,7 @@ fi
 if [[ "$cfg" != *"$screen_opt"* ]]; then
 	backlight_path=`find /sys/class/backlight/* | head -n 1`
 	if [[ -z $backlight_path ]]; then
-		echo "ERROR: Could not find screen device!"
-		exit 1
+		>&2 echo "WARNING: Could not find screen device!"
 	fi
 	screen_dev=`basename $backlight_path`
 	echo $'Screen:\t' "$screen_dev"
@@ -57,7 +56,7 @@ fi
 if [[ "$cfg" != *"$kbd_opt"* ]]; then
 	kbd_led_path=`find /sys/class/leds -name "*kbd_backlight"`
 	if [[ -z $kbd_led_path ]]; then
-		echo "ERROR: Could not find keyboard backlight!"
+		>&2 echo "WARNING: Could not find keyboard backlight!"
 		exit 1
 	fi
 	kbd_dev=`basename $kbd_led_path`
@@ -70,7 +69,7 @@ fi
 if [[ "$cfg" != *"$plug_opt"* ]]; then
 	plug_path=`find /sys/class/power_supply/ADP* | head -n 1`
 	if [[ -z $plug_path ]]; then
-		echo "ERROR: Could not find AC Adapter!"
+		>&2 echo "WARINING: Could not find AC Adapter!"
 		exit 1
 	fi
 	plug_dev=`basename $plug_path`
@@ -83,7 +82,7 @@ fi
 if [[ "$cfg" != *"$lid_opt"* ]]; then
 	lid_path=`find /proc/acpi/button/lid/* | head -n 1`
 	if [[ -z $lid_path ]]; then
-		echo "ERROR: Could not find lid button!"
+		>&2 echo "WARNING: Could not find lid button!"
 		exit 1
 	fi
 	lid_dev=`basename $lid_path`
@@ -131,7 +130,7 @@ clean:
 	@ $(MAKE) --no-print-directory -C src/ clean
 
 distclean: clean
-	@ echo Removing configuration..
+	@ echo Removing configuration...
 	@ rm etc/autolight.conf
 	@ echo Done!
 	@ rm Makefile

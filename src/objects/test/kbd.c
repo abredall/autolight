@@ -14,6 +14,8 @@ int test_kbd(int * n_pass, int * n_fail) {
 	printf("Testing connection to keyboard...\n");
 	fflush(stdout);
 
+	kbd_connect();
+
 	int result;
 
 	result = test_read_kbd_bri();
@@ -37,6 +39,8 @@ int test_kbd(int * n_pass, int * n_fail) {
 		*n_fail += 1;
 	}
 
+	printf("Keyboard tests complete!\n\n");
+	fflush(stdout);
 	return 0;
 }
 
@@ -51,10 +55,10 @@ int test_read_kbd_bri() {
 		return EXIT_FAILURE;
 	}
 
-	FILE * fp_in = fopen(cfg.files.kbd_bri, "r");
+	FILE * fp_in = fopen(kbd.files.bri, "r");
 
 	if (fp_in == NULL) {
-		printf("Failed\n - Could not read %s: %s\n", cfg.files.kbd_bri, strerror(errno));
+		printf("Failed\n  -> Could not read %s: %s\n", kbd.files.bri, strerror(errno));
 		fflush(stdout);
 		return EXIT_FAILURE;
 	}
@@ -74,10 +78,10 @@ int test_write_kbd_bri() {
 		return EXIT_FAILURE;
 	}
 
-	FILE * fp_out = fopen(cfg.files.kbd_bri, "w");
+	FILE * fp_out = fopen(kbd.files.bri, "w");
 
 	if (fp_out == NULL) {
-		printf("Failed\n - Could not write to %s: %s\n", cfg.files.kbd_bri, strerror(errno));
+		printf("Failed\n  -> Could not write to %s: %s\n", kbd.files.bri, strerror(errno));
 		fflush(stdout);
 		return EXIT_FAILURE;
 	}
@@ -97,10 +101,10 @@ int test_read_kbd_max_bri() {
 		return EXIT_FAILURE;
 	}
 
-	FILE * fp_in = fopen(cfg.files.kbd_max_bri, "r");
+	FILE * fp_in = fopen(kbd.files.max_bri, "r");
 
 	if (fp_in == NULL) {
-		printf("Failed\n - Could not read %s: %s\n", cfg.files.kbd_max_bri, strerror(errno));
+		printf("Failed\n  -> Could not read %s: %s\n", kbd.files.max_bri, strerror(errno));
 		fflush(stdout);
 		return EXIT_FAILURE;
 	}
@@ -112,6 +116,6 @@ int test_read_kbd_max_bri() {
 }
 
 void print_kbd_not_connected() {
-	printf("Failed\n - Could not connect to keyboard.\n");
+	printf("Failed\n  -> Could not connect to keyboard %s\n", kbd.name);
 	fflush(stdout);
 }

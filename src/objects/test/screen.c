@@ -14,6 +14,8 @@ int test_screen(int * n_pass, int * n_fail) {
 	printf("Testing connection to screen...\n");
 	fflush(stdout);
 
+	screen_connect();
+
 	int result;
 
 	result = test_read_screen_bri();
@@ -37,6 +39,8 @@ int test_screen(int * n_pass, int * n_fail) {
 		*n_fail += 1;
 	}
 
+	printf("Screen tests complete!\n\n");
+	fflush(stdout);
 	return 0;
 }
 
@@ -51,10 +55,10 @@ int test_read_screen_bri() {
 		return EXIT_FAILURE;
 	}
 
-	FILE * fp_in = fopen(cfg.files.bri, "r");
+	FILE * fp_in = fopen(screen.files.bri, "r");
 
 	if (fp_in == NULL) {
-		printf("Failed\n - Could not read %s: %s\n", cfg.files.bri, strerror(errno));
+		printf("Failed\n  -> Could not read %s: %s\n", screen.files.bri, strerror(errno));
 		fflush(stdout);
 		return EXIT_FAILURE;
 	}
@@ -74,10 +78,10 @@ int test_write_screen_bri() {
 		return EXIT_FAILURE;
 	}
 
-	FILE * fp_out = fopen(cfg.files.bri, "w");
+	FILE * fp_out = fopen(screen.files.bri, "w");
 
 	if (fp_out == NULL) {
-		printf("Failed\n - Could not write to %s: %s\n", cfg.files.bri, strerror(errno));
+		printf("Failed\n  -> Could not write to %s: %s\n", screen.files.bri, strerror(errno));
 		fflush(stdout);
 		return EXIT_FAILURE;
 	}
@@ -97,10 +101,10 @@ int test_read_screen_max_bri() {
 		return EXIT_FAILURE;
 	}
 
-	FILE * fp_in = fopen(cfg.files.max_bri, "r");
+	FILE * fp_in = fopen(screen.files.max_bri, "r");
 
 	if (fp_in == NULL) {
-		printf("Failed\n - Could not read %s: %s\n", cfg.files.max_bri, strerror(errno));
+		printf("Failed\n  -> Could not read %s: %s\n", screen.files.max_bri, strerror(errno));
 		fflush(stdout);
 		return EXIT_FAILURE;
 	}
@@ -112,6 +116,6 @@ int test_read_screen_max_bri() {
 }
 
 void print_screen_not_connected() {
-	printf("Failed\n - Could not connect to screen.\n");
+	printf("Failed\n  -> Could not connect to screen %s.\n", screen.name);
 	fflush(stdout);
 }

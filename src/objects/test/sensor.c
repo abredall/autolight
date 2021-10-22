@@ -13,6 +13,8 @@ int test_sensor(int * n_pass, int * n_fail) {
 	printf("Testing connection to sensor...\n");
 	fflush(stdout);
 
+	sensor_connect();
+
 	int result;
 
 	result = test_read_lux_value();
@@ -29,6 +31,8 @@ int test_sensor(int * n_pass, int * n_fail) {
 		*n_fail += 1;
 	}
 
+	printf("Sensor tests complete!\n\n");
+	fflush(stdout);
 	return 0;
 }
 
@@ -43,10 +47,10 @@ int test_read_lux_value() {
 		return EXIT_FAILURE;
 	}
 
-	FILE * fp_in = fopen(cfg.files.als_lux, "r");
+	FILE * fp_in = fopen(sensor.files.input, "r");
 
 	if (fp_in == NULL) {
-		printf("Failed\n - Could not read %s: %s\n", cfg.files.als_lux, strerror(errno));
+		printf("Failed\n  -> Could not read %s: %s\n", sensor.files.input, strerror(errno));
 		fflush(stdout);
 		return EXIT_FAILURE;
 	}
@@ -66,10 +70,10 @@ int test_read_als_freq() {
 		return EXIT_FAILURE;
 	}
 
-	FILE * fp_in = fopen(cfg.files.als_freq, "r");
+	FILE * fp_in = fopen(sensor.files.freq, "r");
 
 	if (fp_in == NULL) {
-		printf("Failed\n - Could not read %s: %s\n", cfg.files.als_freq, strerror(errno));
+		printf("Failed\n  -> Could not read %s: %s\n", sensor.files.freq, strerror(errno));
 		fflush(stdout);
 		return EXIT_FAILURE;
 	}
@@ -81,6 +85,6 @@ int test_read_als_freq() {
 }
 
 void print_als_not_connected() {
-	printf("Failed\n  ->Could not connect to ALS.\n");
+	printf("Failed\n  -> Could not connect to ALS %s\n", sensor.name);
 	fflush(stdout);
 }

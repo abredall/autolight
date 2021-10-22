@@ -4,7 +4,7 @@
 #include <string.h>
 #include "../cfg.h"
 
-char * read_cfg_str(char * desired_name, char * DEF_VALUE) {
+void read_cfg_str(char * desired_name, char * ret, char * DEF_VALUE) {
 	char name[PATH_MAX];
 	char val[PATH_MAX];
 
@@ -16,15 +16,17 @@ char * read_cfg_str(char * desired_name, char * DEF_VALUE) {
 
 	while (fscanf(cfg_in, "%1023[^=]=%1023[^\n]%*c", name, val) == 2) {
 		if (0 == strcmp(name, desired_name)) {
-			return strdup(val);
+			strcpy(ret, val);
+			return;
 		}
 	}
 
-	return DEF_VALUE;
+	strcpy(ret, DEF_VALUE);
 }
 
 int read_cfg_long(char * desired_name, unsigned long int * ret, unsigned long int DEF_VALUE) {
-    char * temp = read_cfg_str(desired_name, NULL);
+    char temp[PATH_MAX];
+	read_cfg_str(desired_name, temp, '\0');
 	if (temp == NULL) {
 		*ret = DEF_VALUE;
 		return 0;
@@ -33,12 +35,12 @@ int read_cfg_long(char * desired_name, unsigned long int * ret, unsigned long in
     char * stop;
     *ret = strtol(temp, &stop, 10);
 	int ret_val = stop == NULL || *stop != '\0';
-    free(temp);
     return ret_val;
 }
 
 int read_cfg_float(char * desired_name, float * ret, float DEF_VALUE) {
-    char * temp = read_cfg_str(desired_name, NULL);
+    char temp[PATH_MAX];
+	read_cfg_str(desired_name, temp, NULL);
 	if (temp == NULL) {
 		*ret = DEF_VALUE;
 		return 0;
@@ -47,6 +49,5 @@ int read_cfg_float(char * desired_name, float * ret, float DEF_VALUE) {
     char * stop;
     *ret = strtof(temp, &stop);
 	int ret_val = stop == NULL || *stop != '\0';
-    free(temp);
     return ret_val;
 }

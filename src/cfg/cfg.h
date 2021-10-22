@@ -5,33 +5,22 @@
 struct Config {
 	char fname[PATH_MAX];
 
-	struct Devs {
+	struct {
 		char screen[PATH_MAX];
 		char kbd[PATH_MAX];
-		char als[PATH_MAX];
-		char plug[PATH_MAX];
 		char lid[PATH_MAX];
+		char plug[PATH_MAX];
+		char als[PATH_MAX];
 	} devs;
 
-	struct Files {
-		char bri[PATH_MAX];
-		char max_bri[PATH_MAX];
-		char kbd_bri[PATH_MAX];
-		char kbd_max_bri[PATH_MAX];
-		char plug_state[PATH_MAX];
-		char lid_state[PATH_MAX];
-		char als_lux[PATH_MAX];
-		char als_freq[PATH_MAX];
-	} files;
-
-	struct Scaling {
-		unsigned int min_lux;
+	struct {
+		unsigned long int min_lux;
 		unsigned long int max_lux;
 		float bri_thresh_frac;
 		float bri_unpl_mod;
 	} scales;
 
-	struct ALS {
+	struct {
 		float pol_per;
 	} als;
 } cfg;
@@ -50,27 +39,6 @@ extern void config_initialize(char * BIN_PATH);
 #define OPT_ALS_POL_PER "als-polling-period"
 #define OPT_BRI_THRESH_FRAC "brightness-threshold-fraction"
 #define OPT_BRI_UNPL_MOD "brightness-unplugged-modifier"
-
-#define DEF_SCREEN_DEV ""
-#define DEF_KBD_DEV ""
-#define DEF_PLUG_DEV ""
-#define DEF_LID_DEV ""
-#define DEF_ALS_DEV ""
-
-#define DEF_BACKLIGHT_DIR "/sys/class/backlight"
-#define DEF_KBD_DIR "/sys/class/leds"
-#define DEF_PLUG_DIR "/sys/class/power_supply"
-#define DEF_LID_DIR "/proc/acpi/button/lid"
-#define DEF_ALS_DIR "/sys/bus/iio/devices"
-
-#define DEF_BRI_FNAME "brightness"
-#define DEF_MAX_BRI_FNAME "max_brightness"
-#define DEF_KBD_BRI_FNAME "brightness"
-#define DEF_KBD_MAX_BRI_FNAME "max_brightness"
-#define DEF_PLUG_STATE_FNAME "online"
-#define DEF_LID_STATE_FNAME "state"
-#define DEF_ALS_LUX_FNAME "in_illuminance_input"
-#define DEF_ALS_FREQ_FNAME "in_illuminance_sampling_frequency"
 
 #define DEF_MIN_LUX 50
 #define DEF_MAX_LUX 1000000

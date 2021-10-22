@@ -23,14 +23,15 @@ int main(int argc, char **argv) {
 	while(1) {
 		clock_t then = clock();
 		check_lid_state();
-		if (laptop.lid_state == 1) {
+		if (laptop.lid.state == 1) {
+			sensor_update();
 			change_brightness();
 
-			/* speed up loop if brightness is changing */
-			if (screen.ch_bri || kbd.ch_bri) {
+			// Speed up loop if brightness is changing
+			if (screen.bri.ch || kbd.bri.ch) {
 				nanosleep(&changing, NULL);
 			} else {
-				/* otherwise sleep for polling period minus loop runtime */
+				// Otherwise sleep for polling period minus loop runtime
 				clock_t now = clock();
 				long int sleep_nsec = (long int)(pol_per_nsec-(now - then)/(CLOCKS_PER_SEC*1000000000));
 				struct timespec remaining = {sleep_nsec/1000000000, sleep_nsec%1000000000};
@@ -38,9 +39,9 @@ int main(int argc, char **argv) {
 			}
 
 		} else {
-			screen.curr_bri = 0;
+			screen.bri.curr = 0;
 			screen_set_bri();
-			kbd.curr_bri = 0;
+			kbd.bri.curr = 0;
 			kbd_set_bri();
 			nanosleep(&onesec, NULL);
 		}
@@ -50,89 +51,84 @@ int main(int argc, char **argv) {
 }
 
 void change_brightness() {
-	// First, we grab everything we need from the last time the sensor was used
-	int bri_old;
-	if (screen.online) bri_old = screen.curr_bri;
-
-	int kbd_bri_old;
-	if (kbd.online) kbd_bri_old = kbd.curr_bri;
-
-	sensor_update();
-
-	int bri_new;
-	if (screen.online) bri_new = sensor_get_bri();
-
-	int kbd_bri_new;
-	if (kbd.online) kbd_bri_new = sensor_get_kbd_bri();
-
-	char change_bri;
+	// Determine if we need to adjust the screen brightness
+	int screen_bri_old; int screen_bri_new; char change_bri;
 	if (screen.online) {
-		float bri_frac_old = scale_log(bri_old, screen.min_bri, screen.max_bri);
-		float bri_frac_new = scale_log(bri_new, screen.min_bri, screen.max_bri);
+		screen_bri_old = screen.bri.curr;
+		screen_bri_new = sensor_get_bri();
+
+		float bri_frac_old = scale_log(screen_bri_old, screen.bri.min, screen.bri.max);
+		float bri_frac_new = scale_log(screen_bri_new, screen.bri.min, screen.bri.max);
 
 		float frac_diff=fabs(bri_frac_new-bri_frac_old);
 
-		if (frac_diff > cfg.scales.bri_thresh_frac && !screen.ch_bri) {
+		if (frac_diff > cfg.scales.bri_thresh_frac && !screen.bri.ch) {
 			change_bri=1;
-		} else if (bri_new != bri_old && screen.ch_bri){
+		} else if (screen_bri_new != screen_bri_old && screen.bri.ch){
 			change_bri=1;
 		} else {
 			change_bri=0;
 		}
 	}
 
-	char change_kbd_bri;
+	// Determine if we need to adjust the keyboard brightness
+	int kbd_bri_old; int kbd_bri_new; char change_kbd_bri;
 	if (kbd.online) {
-		float kbd_bri_frac_old = scale_lin(kbd_bri_old, kbd.min_bri, kbd.max_bri);
-		float kbd_bri_frac_new = scale_lin(kbd_bri_new, kbd.min_bri, kbd.max_bri);
+		kbd_bri_old = kbd.bri.curr;
+		kbd_bri_new = sensor_get_kbd_bri();
+
+		float kbd_bri_frac_old = scale_lin(kbd_bri_old, kbd.bri.min, kbd.bri.max);
+		float kbd_bri_frac_new = scale_lin(kbd_bri_new, kbd.bri.min, kbd.bri.max);
 
 		float frac_kbd_diff = fabs(kbd_bri_frac_new-kbd_bri_frac_old);
 
-		if (frac_kbd_diff > cfg.scales.bri_thresh_frac && !kbd.ch_bri) {
+		if (frac_kbd_diff > cfg.scales.bri_thresh_frac && !kbd.bri.ch) {
 			change_kbd_bri=1;
-		} else if (kbd_bri_new != kbd_bri_old && kbd.ch_bri){
+		} else if (kbd_bri_new != kbd_bri_old && kbd.bri.ch){
 			change_kbd_bri=1;
 		} else {
 			change_kbd_bri=0;
 		}
 	}
 
-	// Always change the brightness when plugged in or unplugged
-	if (laptop.plug_online) {
-		int plug_state_old = laptop.plug_state;
+	// Always change the brightness when plug state changes
+	if (laptop.plug.online) {
+		int plug_state_old = laptop.plug.state;
 		check_plug_state();
-		int plug_state_new = laptop.plug_state;
+		int plug_state_new = laptop.plug.state;
 		if (plug_state_new != plug_state_old) {
 			change_bri=1;
 			change_kbd_bri=1;
 		}
 	}
 
+	// Change screen brightness accordingly
 	if (change_bri && screen.online) {
-		if (bri_new > bri_old) {
-			screen.curr_bri += 1;
-		} else if (bri_new < bri_old) {
-			screen.curr_bri -= 1;
+		if (screen_bri_new > screen_bri_old) {
+			screen.bri.curr += 1;
+		} else if (screen_bri_new < screen_bri_old) {
+			screen.bri.curr -= 1;
 		} else {
-			screen.curr_bri = bri_new;
+			screen.bri.curr = screen_bri_new;
 		}
 		screen_set_bri();
-		screen.ch_bri = true;
+		screen.bri.ch = true;
 	} else {
-		screen.ch_bri = false;
+		screen.bri.ch = false;
 	}
 
+	// Change keyboard brightness accordingly
 	if (change_kbd_bri && kbd.online) {
 		if (kbd_bri_new > kbd_bri_old) {
-			kbd.curr_bri += 1;
+			kbd.bri.curr += 1;
 		} else if (kbd_bri_new < kbd_bri_old) {
-			kbd.curr_bri -= 1;
+			kbd.bri.curr -= 1;
 		} else {
-			kbd.curr_bri = kbd_bri_new;
+			kbd.bri.curr = kbd_bri_new;
 		}
 		kbd_set_bri();
-		kbd.ch_bri = true;
+		kbd.bri.ch = true;
 	} else {
-		kbd.ch_bri = false;
+		kbd.bri.ch = false;
 	}
 }

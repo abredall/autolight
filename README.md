@@ -5,7 +5,7 @@ A lightweight ambient light sensor daemon
 
 ## Description
 
-autolight is a small C program that reads lux values from the ambient light sensor, and adjusts the screen and keyboard brightness accordingly. It is designed to be incredibly simple, lightweight, and customizable.
+autolight is a small C program that reads lux values from the ambient light sensor, and adjusts the screen and keyboard brightness accordingly. It is designed to be simple, lightweight, and customizable.
 
 ### Features
 - Dim screen when ambient light is low, and vice versa

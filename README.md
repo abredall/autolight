@@ -1,4 +1,5 @@
 # autolight
+© 2021 John W. Bredall
 
 Adjust screen brightness based on input from an ambient light sensor
 
@@ -67,4 +68,4 @@ autolight stores its configuration in `$PREFIX/etc/autolight.conf` (default `/us
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details
+This project is licensed under the GNU General Public License - see the COPYING file for details

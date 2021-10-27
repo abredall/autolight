@@ -1,5 +1,6 @@
 /*
- *   Copyright 2021 John W. Bredall
+ *   autolight: a lightweight ambient light sensor daemon
+ *   Copyright (C) 2021 John W. Bredall
  *
  *   This file is part of autolight.
  *

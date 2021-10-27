@@ -1,7 +1,7 @@
 # autolight
 © 2021 John W. Bredall
 
-Adjust screen brightness based on input from an ambient light sensor
+A lightweight ambient light sensor daemon
 
 ## Description
 

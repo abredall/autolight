@@ -26,6 +26,7 @@
 #include <errno.h>
 #include "../io.h" // read_from(), write_to()
 #include "../cfg.h" // cfg
+#include "../debug.h" // debug_print
 #include "kbd.h" // kbd
 
 extern void kbd_initialize();
@@ -50,9 +51,11 @@ void kbd_initialize() {
 }
 
 void kbd_connect() {
+	debug_print("%s\n", "Connecting to keyboard...");
 	strcpy(kbd.name, cfg.devs.kbd);
 
 	if (kbd.name[0] == '\0') {
+		debug_print("%s\n", "Could not connect to keyboard: name not given in cfg. Disabling...");
 		kbd.online = 0;
 		return;
 	}
@@ -63,9 +66,11 @@ void kbd_connect() {
 
 	if (dir) {
 		closedir(dir);
+		debug_print("%s\n", "Keyboard connected!");
 		kbd.online = 1;
 		kbd_init_paths();
 	} else if (ENOENT == errno) {
+		debug_print("Could not connect to keyboard %s: path doesn't exist. Disabling...\n", kbd.name);
 		kbd.online = 0;
 	} else {
 		// opendir() failed for some other reason.
@@ -86,6 +91,7 @@ int kbd_get_bri() {
 		fprintf(stderr, "ERROR: Could not get keyboard brightness.\n");
 		exit(EXIT_FAILURE);
 	}
+	debug_print("Current brightness: %d\n", kbd.bri.curr);
 	return result;
 }
 
@@ -95,6 +101,7 @@ int kbd_set_bri() {
 		fprintf(stderr, "ERROR: Could not set keyboard brightness.\n");
 		exit(EXIT_FAILURE);
 	}
+	debug_print("New brightness: %d\n", kbd.bri.curr);
 	return result;
 }
 
@@ -104,6 +111,7 @@ int kbd_get_max_bri() {
 		fprintf(stderr, "ERROR: Could not get maximum keyboard brightness.\n");
 		exit(EXIT_FAILURE);
 	}
+	debug_print("Max brightness: %d\n", kbd.bri.max);
 	return result;
 }
 

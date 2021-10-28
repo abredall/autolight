@@ -22,13 +22,18 @@
 #include <stdio.h>
 #include <math.h> // fabs()
 #include <time.h> // usleep()
+#include <string.h>
 #include "cfg.h"
 #include "objects.h"
 #include "math.h"
+#include "args.h"
+#include "debug.h"
 
+extern void parse_args(int argc, char **argv);
 extern void change_brightness();
 
 int main(int argc, char **argv) {
+	parse_args(argc, argv);
 	config_initialize(argv[0]);
 	screen_initialize();
 	kbd_initialize();
@@ -103,6 +108,7 @@ void change_brightness() {
 		float frac_kbd_diff = fabs(kbd_bri_frac_new-kbd_bri_frac_old);
 
 		if (frac_kbd_diff > cfg.scales.bri_thresh_frac && !kbd.bri.ch) {
+			debug_print("%s\n", "Keyboard threshold reached. Changing brightness...");
 			change_kbd_bri=1;
 		} else if (kbd_bri_new != kbd_bri_old && kbd.bri.ch){
 			change_kbd_bri=1;
@@ -117,6 +123,7 @@ void change_brightness() {
 		check_plug_state();
 		int plug_state_new = laptop.plug.state;
 		if (plug_state_new != plug_state_old) {
+			debug_print("%s\n", "Plug state changed. Adjusting brightness...");
 			change_bri=1;
 			change_kbd_bri=1;
 		}
@@ -150,5 +157,15 @@ void change_brightness() {
 		kbd.bri.ch = true;
 	} else {
 		kbd.bri.ch = false;
+	}
+}
+
+void parse_args(int argc, char **argv){
+	int idx = 0;
+	for (idx = 1; idx < argc;  idx++) {
+		if (strcmp(argv[idx], "--debug") == 0) {
+			args.debug = 1;
+			debug_print("%s\n", "Autolight debug mode enabled.");
+	   }
 	}
 }

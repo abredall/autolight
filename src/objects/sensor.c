@@ -28,6 +28,7 @@
 #include "../objects.h"
 #include "../math.h"
 #include "../io.h"
+#include "../debug.h" // debug_print
 
 extern void sensor_initialize();
 extern void sensor_connect();
@@ -50,9 +51,11 @@ void sensor_initialize() {
 }
 
 void sensor_connect() {
+	debug_print("%s\n", "Connecting to ALS...");
 	strcpy(sensor.name, cfg.devs.als);
 
 	if (sensor.name[0] == '\0') {
+		debug_print("%s\n", "Could not connect to ALS: name not given in cfg. Disabling...");
 		sensor.online = 0;
 		return;
 	}
@@ -62,9 +65,11 @@ void sensor_connect() {
 
 	if (dir) {
 		closedir(dir);
+		debug_print("%s\n", "ALS connected!");
 		sensor.online = 1;
 		sensor_init_paths();
 	} else if (ENOENT == errno) {
+		debug_print("Could not connect to ALS %s: path doesn't exist. Disabling...\n", kbd.name);
 		sensor.online = 0;
 	} else {
 		// opendir() failed for some other reason.
@@ -85,10 +90,12 @@ int sensor_update() {
 		fprintf(stderr, "ERROR: Could not get ALS lux.\n");
 		exit(EXIT_FAILURE);
 	}
-
+	debug_print("Current ambient lux: %li\n", lux);
 	if (lux < cfg.scales.min_lux) {
+		debug_print("Ambient lux less than minimum! Setting to %li\n", cfg.scales.min_lux);
 		lux = cfg.scales.min_lux;
 	} else if (lux > cfg.scales.max_lux) {
+		debug_print("Ambient lux greater than maximum! Setting to %li\n", cfg.scales.max_lux);
 		lux = cfg.scales.max_lux;
 	}
 
@@ -144,6 +151,7 @@ int sensor_init_per() {
 			fprintf(stderr, "ERROR: Could not get ALS frequency\n");
 			exit(EXIT_FAILURE);
 		}
+		debug_print("ALS sensor frequency: %f\n", sensor_freq);
 		sensor.pol_per=1/sensor_freq;
 	} else {
 		sensor.pol_per = cfg.als.pol_per;

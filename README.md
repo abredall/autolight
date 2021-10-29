@@ -58,7 +58,7 @@ For best results, configure your system to run the above command in the backgrou
 
 ## Configuration
 autolight stores its configuration in `$PREFIX/etc/autolight.conf` (default `/usr/local/etc/autolight.conf`) and offers the following settings:
-- `screen-device`: The name of the screen whos backlight is to be adjusted.
+- `screen-device`: The name of the screen whose backlight is to be adjusted.
 - `als-device`: The name of the ambient light sensor device
 - `kbd-device`: The name of the keyboard backlight interface
 - `plug-device`: The name of the AC adapter
@@ -68,6 +68,9 @@ autolight stores its configuration in `$PREFIX/etc/autolight.conf` (default `/us
 - `als-polling-period`: The time in seconds between each successive poll of the ALS. If set to 0, autolight will match the ALS's own frequency (i.e. as fast as the ALS allows) (default: 0)
 - `brightness-threshold-fraction`: What fraction in logspace (between 0 and 1) the ambient brightness must change by for autolight to adjust the screen brightness. Larger values require a greater ambient light change, and vice versa (default: 0.3)
 - `brightness-unplugged-modifier`: What fraction (between 0 and 1) to multiply the screen brightness by when the laptop is unplugged. Set to 1 to disable dimming when unplugged (default: 0.9)
+
+## Known Bugs
+- May crash if a setting is missing from the config file
 
 ## TODO
 - [x] feat: allow configuration between runtime

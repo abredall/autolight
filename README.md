@@ -1,5 +1,5 @@
 # autolight
-© 2021 John W. Bredall
+© 2021 Ari E. Bredall
 
 A lightweight ambient light sensor daemon
 
@@ -8,7 +8,7 @@ A lightweight ambient light sensor daemon
 autolight is a small C program that reads lux values from the ambient light sensor, and adjusts the screen and keyboard brightness accordingly. It is designed to be simple, lightweight, and customizable.
 
 ### Features
-- Dim screen when ambient light is low, and vice versa
+- Dim screen when ambient liaght is low, and vice versa
 - Brighten keyboard backlight when ambient light is low, and vice versa
 - Dim screen when laptop is unplugged
 - Set screen and keyboard brightness to 0 when laptop is closed

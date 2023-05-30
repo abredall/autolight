@@ -1,6 +1,6 @@
 /*
  *   autolight: a lightweight ambient light sensor daemon
- *   Copyright (C) 2021 John W. Bredall
+ *   Copyright (C) 2023 Ari E. Bredall
  *
  *   This file is part of autolight.
  *

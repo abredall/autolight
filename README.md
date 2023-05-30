@@ -1,5 +1,5 @@
 # autolight
-© 2021 Ari E. Bredall
+© 2023 Ari E. Bredall
 
 A lightweight ambient light sensor daemon
 
